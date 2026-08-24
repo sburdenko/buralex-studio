@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhySlow — interactive demo | Buralex.Studio</title>
+<meta name="description" content="Click through WhySlow in the browser: Checkup, Project Assets, Build X-Ray, Performance Hunter and Compile Time, running on a fake Unity project. No install, no download.">
+<meta property="og:title" content="WhySlow — interactive demo">
+<meta property="og:description" content="The whole tool, running on fake data in your browser. Press the buttons.">
+<meta property="og:image" content="assets/img/buralex-banner-900x600.png">
+<link rel="icon" href="assets/img/buralex-logo-200x200.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/demo.css">
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-cube" viewBox="0 0 16 16"><path d="M8 1 1.5 4.5v7L8 15l6.5-3.5v-7L8 1zm0 1.7 4.6 2.5L8 7.7 3.4 5.2 8 2.7zM3 6.5l4.4 2.4v4.4L3 10.9V6.5zm5.6 6.8V8.9L13 6.5v4.4l-4.4 2.4z"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 16 16"><path d="M1.5 3h4l1.2 1.4H14.5c.3 0 .5.2.5.5v8c0 .3-.2.5-.5.5h-13c-.3 0-.5-.2-.5-.5v-9c0-.3.2-.5.5-.5z"/></symbol>
+  <symbol id="i-script" viewBox="0 0 16 16"><path d="M3 1h7l3.5 3.5V15H3V1zm6.5 1v3H12L9.5 2zM5 7h6v1H5V7zm0 2.5h6v1H5v-1zm0 2.5h4v1H5v-1z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 16 16"><path d="M9 1 3 9h4l-1 6 6-8H8l1-6z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 16 16"><path d="M1 3h14v10H1V3zm1.6 1L8 8.2 13.4 4H2.6z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 16 16"><path d="M4 2l10 6-10 6V2z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 16 16"><path d="M3 2h4v12H3V2zm6 0h4v12H9V2z"/></symbol>
+  <symbol id="i-step" viewBox="0 0 16 16"><path d="M3 2l8 6-8 6V2zm9 0h2v12h-2V2z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M6.2 12.5 1.8 8.1l1.4-1.4 3 3 6.6-6.6 1.4 1.4z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 16 16"><path d="M8 1l6 2.2v4.5c0 3.6-2.5 6.4-6 7.3-3.5-.9-6-3.7-6-7.3V3.2L8 1z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><path d="M10.6 9.2a5 5 0 1 0-1.4 1.4l3.4 3.4 1.4-1.4-3.4-3.4zM6.5 9.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.8 3v4.2l3 1.8-.8 1.3L7.2 9V4h1.6z"/></symbol>
+</svg>
+
+<div class="menubar">
+  <a class="menubar__logo" href="index.html">
+    <img src="assets/img/buralex-logo-200x200.png" alt="Buralex Studio logo">
+    <b>Buralex<i>.Studio</i></b>
+  </a>
+  <a class="menubar__item" href="index.html#products">Products</a>
+  <a class="menubar__item" href="whyslow.html">WhySlow</a>
+  <a class="menubar__item" href="demo.html">Demo</a>
+  <a class="menubar__item" href="index.html#studio">Studio</a>
+  <a class="menubar__item" href="index.html#contact">Contact</a>
+  <div class="menubar__spacer"></div>
+  <div class="menubar__right">
+    <span class="menubar__dot"></span>
+    <span>Unity 2021.3 &rarr; Unity 6</span>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="tb-group">
+    <span class="tb-btn is-on"><svg><use href="#i-play"/></svg></span>
+    <span class="tb-btn"><svg><use href="#i-pause"/></svg></span>
+    <span class="tb-btn"><svg><use href="#i-step"/></svg></span>
+  </div>
+  <div class="toolbar__title"><b>WhySlow</b> — interactive demo — Sample Project (fake data)</div>
+  <a class="tb-ghost" href="whyslow.html">&larr; Back to WhySlow</a>
+  <a class="tb-cta" href="mailto:sburdenko@gmail.com?subject=WhySlow%20beta"><svg style="width:11px;height:11px;fill:currentColor"><use href="#i-mail"/></svg> Ask for a beta</a>
+</div>
+
+<div class="shell shell--wide">
+  <main class="col-main">
+
+    <section class="panel" id="top">
+      <div class="panel__tabs">
+        <span class="tab is-active"><svg><use href="#i-play"/></svg> Demo</span>
+        <a class="tab" href="whyslow.html"><svg><use href="#i-bolt"/></svg> WhySlow</a>
+        <a class="tab" href="index.html"><svg><use href="#i-cube"/></svg> Buralex.Studio</a>
+      </div>
+      <div class="hero">
+        <div class="hero__eyebrow"><span class="menubar__dot"></span> Interactive · runs in your browser · nothing installed</div>
+        <h1>Press the buttons. <span class="hl">It all works.</span></h1>
+        <p class="hero__lead">
+          Below is the WhySlow window itself — the same tabs, the same wording, the same palette —
+          driven by made-up numbers from an imaginary game called Sample Project. Fix an issue and
+          the Health Score moves. Start a hunt and the graph fills. Nothing on your machine is touched.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#window"><svg><use href="#i-play"/></svg> Jump to the window</a>
+          <a class="btn" href="whyslow.html"><svg><use href="#i-bolt"/></svg> What WhySlow is</a>
+          <a class="btn" href="mailto:sburdenko@gmail.com?subject=WhySlow%20beta"><svg><use href="#i-mail"/></svg> Ask for a beta</a>
+        </div>
+        <div class="hero__facts">
+          <span><b>5</b> tabs, all live</span>
+          <span><b>17</b> scene findings</span>
+          <span><b>12</b> code findings</span>
+          <span><b>0</b> downloads</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="window">
+      <div class="panel__head"><svg><use href="#i-bolt"/></svg> Window &rarr; WhySlow &nbsp;·&nbsp; demo build</div>
+      <div class="panel__body" style="padding:10px">
+        <div class="ws" id="ws-demo"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel__body" style="padding-bottom:8px">
+        <h2 class="sec-title"><span class="num">01</span> Where to start</h2>
+        <p class="sec-sub">
+          Five tabs, each answering a different question. If you only try one thing, press
+          <b>Fix all safe issues</b> on the Checkup tab and watch the score climb.
+        </p>
+      </div>
+      <div class="panel__body" style="padding-top:0">
+        <div class="grid grid--2">
+          <div class="card">
+            <h3 style="margin:0 0 6px;font-size:14px">Checkup</h3>
+            <ul class="demo-list">
+              <li>Switch the <b>Profile</b> between Mobile, Desktop and WebGL — the rules that only apply to a target appear and disappear.</li>
+              <li><b>Learn more</b> on any finding opens the full "What to do" text that ships with the tool.</li>
+              <li><b>Optimization Wizard</b> walks the findings one at a time and reports the score change at the end.</li>
+              <li>The <b>Code</b> sub-tab scans scripts without Play Mode.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3 style="margin:0 0 6px;font-size:14px">The other four</h3>
+            <ul class="demo-list">
+              <li><b>Project Assets</b> — scan for dead files, duplicates and wasteful import settings, then quarantine or fix them.</li>
+              <li><b>Build X-Ray</b> — press "Make a build", then click the treemap tiles and compress an asset.</li>
+              <li><b>Performance Hunter</b> — press Start Hunt, wait a few seconds, press Stop. The verdict and the call sites follow.</li>
+              <li><b>Compile Time</b> — press Analyze to price every assembly by what it drags into a rebuild.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel__body" style="padding-bottom:8px">
+        <h2 class="sec-title"><span class="num">02</span> What is real and what is not</h2>
+        <p class="sec-sub">A demo that quietly exaggerates is worth nothing, so here is the line.</p>
+      </div>
+      <div class="panel__body" style="padding-top:0">
+        <div class="grid grid--2">
+          <div class="card">
+            <h3 style="margin:0 0 6px;font-size:14px;color:var(--green)">Real</h3>
+            <ul class="demo-list">
+              <li>The tab structure, the sub-views and every button label.</li>
+              <li>Finding titles, the one-line "why this hurts" and the full "What to do" text — verbatim from the tool.</li>
+              <li>The Health Score formula: 100, minus 12 per critical and 4 per warning.</li>
+              <li>The palette, taken from the same source file the editor window uses.</li>
+              <li>Which fixes are safe to batch, and which are deliberately kept out of Fix All.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3 style="margin:0 0 6px;font-size:14px;color:var(--u-text-mute)">Not real</h3>
+            <ul class="demo-list demo-list--dim">
+              <li>The project. There is no scene, no build and no Play Mode behind this page.</li>
+              <li>The numbers. Asset sizes, timings and allocation rates are plausible, not measured.</li>
+              <li>Select, Show in Scene and Open source line — in Unity they act on your project; here they explain themselves instead.</li>
+              <li>The allocation graph, generated in the browser rather than read from the profiler.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="demo-note">
+          Want it pointed at your own project? <a href="mailto:sburdenko@gmail.com?subject=WhySlow%20beta">Write to me</a> —
+          the beta is free while the asset is in review, and I answer within a day.
+        </p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="statusbar">
+  <span class="keep">WhySlow demo · fake data · nothing is installed</span>
+  <span class="push"><a href="mailto:sburdenko@gmail.com">sburdenko@gmail.com</a></span>
+  <span>·</span>
+  <span>Unity is a trademark of Unity Technologies. Not affiliated.</span>
+</div>
+
+<script src="assets/js/demo-data.js"></script>
+<script src="assets/js/demo.js"></script>
+</body>
+</html>
