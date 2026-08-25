@@ -71,6 +71,7 @@
         <a class="tree__row" href="demo.html"><svg><use href="#i-play"/></svg> Live demo</a>
         <a class="tree__row" href="#modules"><svg><use href="#i-folder"/></svg> Modules</a>
         <a class="tree__row is-child" href="#checkup"><svg><use href="#i-check"/></svg> Checkup</a>
+        <a class="tree__row is-child" href="#assets"><svg><use href="#i-folder"/></svg> Project Assets</a>
         <a class="tree__row is-child" href="#xray"><svg><use href="#i-search"/></svg> Build X-Ray</a>
         <a class="tree__row is-child" href="#hunter"><svg><use href="#i-bolt"/></svg> Perf Hunter</a>
         <a class="tree__row is-child" href="#compile"><svg><use href="#i-clock"/></svg> Compile Time</a>
@@ -104,8 +105,8 @@
           <a class="btn" href="mailto:sburdenko@gmail.com?subject=WhySlow%20question"><svg><use href="#i-mail"/></svg> Ask before you buy</a>
         </div>
         <div class="hero__facts">
-          <span><b>4</b> modules in one window</span>
-          <span><b>25+</b> scene &amp; project checks</span>
+          <span><b>5</b> modules in one window</span>
+          <span><b>34</b> scene &amp; project checks</span>
           <span><b>0 KB</b> in your build</span>
           <span><b>Undo</b> on every fix</span>
           <span><b>2021.3 → 6</b></span>
@@ -120,6 +121,7 @@
           <div class="mock__bar">WhySlow — Performance &amp; Build Size Checkup</div>
           <div class="mock__tabs">
             <span class="mock__tab on">Checkup</span>
+            <span class="mock__tab">Project Assets</span>
             <span class="mock__tab">Build X-Ray</span>
             <span class="mock__tab">Performance Hunter</span>
             <span class="mock__tab">Compile Time</span>
@@ -128,11 +130,11 @@
             <div class="score">
               <span class="score__label">Health Score</span>
               <span class="score__bar"><span class="score__fill"></span></span>
-              <span class="score__val">68/100</span>
+              <span class="score__val">52/100</span>
             </div>
             <div class="tally">
-              <i><span class="dot dot--red"></span>3 critical</i>
-              <i><span class="dot dot--amber"></span>7 warnings</i>
+              <i><span class="dot dot--red"></span>2 critical</i>
+              <i><span class="dot dot--amber"></span>6 warnings</i>
               <i><span class="dot dot--green"></span>14 passed</i>
             </div>
             <div class="issue">
@@ -160,7 +162,7 @@
 
     <section class="panel" id="modules">
       <div class="panel__body" style="padding-bottom:8px">
-        <h2 class="sec-title"><span class="num">01</span> Four modules, one window</h2>
+        <h2 class="sec-title"><span class="num">01</span> Five modules, one window</h2>
         <p class="sec-sub">
           Each tab answers a different question you would otherwise spend an afternoon on.
           They share one rule: what is wrong, why it hurts, what to press.
@@ -173,7 +175,7 @@
           <div class="product__title">Checkup — Scene &amp; Code</div>
           <div class="product__tag">
             Static analysis of the open scene, your project settings and your scripts. Instant,
-            no Play Mode. 25+ rules: realtime shadow-casting lights, uncompressed textures,
+            no Play Mode. 34 scene and project rules plus 15 code rules: realtime shadow-casting lights,
             missing scripts, realtime GI, a disabled SRP Batcher, UI raycast spam, Read/Write
             enabled meshes and textures, Layout Groups rebuilding every frame, animation culling,
             physics settings. Each finding gets Select, Fix and Learn more.
@@ -187,8 +189,29 @@
         </div>
       </div>
 
+      <div class="product" id="assets">
+        <div class="product__icon" style="color:var(--teal-light);border-color:#2f7c76">2</div>
+        <div>
+          <div class="product__title">Project Assets</div>
+          <div class="product__tag">
+            What has accumulated on disk, whether or not you have ever made a build. Dead Asset
+            Stripper finds files nothing reaches from a build scene, a Resources folder or an
+            Addressables entry — dry run first, quarantine second, never a delete. Duplicates
+            finds byte-identical files and materials that differ only by name. Import Settings
+            finds meshes and textures keeping a second copy in memory, Humanoid rigs nothing
+            retargets, and animation clips paying for scale curves.
+          </div>
+          <div class="product__meta">
+            <span class="chip">Dry run before anything moves</span>
+            <span class="chip">Quarantine, not delete</span>
+            <span class="chip">Backup .unitypackage on every move</span>
+            <span class="chip">Byte-identical and equivalent-material duplicates</span>
+          </div>
+        </div>
+      </div>
+
       <div class="product" id="xray">
-        <div class="product__icon" style="color:var(--amber);border-color:var(--amber-dim)">2</div>
+        <div class="product__icon" style="color:var(--amber);border-color:var(--amber-dim)">3</div>
         <div>
           <div class="product__title">Build X-Ray</div>
           <div class="product__tag">
@@ -202,13 +225,12 @@
             <span class="chip">Top-20 heaviest assets</span>
             <span class="chip">Duplicate finder</span>
             <span class="chip">Estimated saving before you apply</span>
-            <span class="chip">Dead asset stripper</span>
           </div>
         </div>
       </div>
 
       <div class="product" id="hunter">
-        <div class="product__icon" style="color:var(--teal-light);border-color:#2f7c76">3</div>
+        <div class="product__icon" style="color:var(--green);border-color:#4a6b3c">4</div>
         <div>
           <div class="product__title">Performance Hunter</div>
           <div class="product__tag">
@@ -228,7 +250,7 @@
       </div>
 
       <div class="product" id="compile">
-        <div class="product__icon" style="color:var(--cream);border-color:#5a5a5a">4</div>
+        <div class="product__icon" style="color:var(--cream);border-color:#5a5a5a">5</div>
         <div>
           <div class="product__title">Compile Time</div>
           <div class="product__tag">

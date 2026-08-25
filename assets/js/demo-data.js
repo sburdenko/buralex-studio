@@ -406,10 +406,33 @@ window.WS_DATA = (function () {
       { name: "Textures", bytes: 214 * 1024 * 1024, color: "#efa93c", count: 1284 },
       { name: "Audio",    bytes: 61 * 1024 * 1024,  color: "#5fd8cd", count: 212 },
       { name: "Meshes",   bytes: 48 * 1024 * 1024,  color: "#7fb069", count: 396 },
-      { name: "Code",     bytes: 38 * 1024 * 1024,  color: "#8a939b", count: 1 },
-      { name: "Shaders",  bytes: 26 * 1024 * 1024,  color: "#d9614e", count: 74 },
+      {
+        name: "Code", bytes: 38 * 1024 * 1024, color: "#8a939b", count: 1,
+        rows: [
+          "libil2cpp.so (arm64-v8a)  —  21.4 MB",
+          "libil2cpp.so (armeabi-v7a)  —  14.8 MB",
+          "Managed assemblies, stripped  —  1.8 MB"
+        ]
+      },
+      {
+        name: "Shaders", bytes: 26 * 1024 * 1024, color: "#d9614e", count: 74,
+        rows: [
+          "Universal Render Pipeline/Lit  —  9.1 MB (612 variants)",
+          "Universal Render Pipeline/Particles/Unlit  —  4.4 MB (288 variants)",
+          "Shader Graph/WaterSurface  —  3.2 MB (196 variants)",
+          "TextMeshPro/Distance Field  —  1.9 MB (104 variants)"
+        ]
+      },
       { name: "Fonts",    bytes: 12 * 1024 * 1024,  color: "#3e8f89", count: 9 },
-      { name: "Other",    bytes: 13 * 1024 * 1024,  color: "#5b666e", count: 331 }
+      {
+        name: "Other", bytes: 13 * 1024 * 1024, color: "#5b666e", count: 331,
+        rows: [
+          "Assets/Scenes/Level_01.unity  —  3.6 MB",
+          "Assets/Data/Localization.asset  —  2.1 MB",
+          "Assets/Scenes/MainMenu.unity  —  1.4 MB",
+          "Resources/UI/Prefabs  —  1.2 MB"
+        ]
+      }
     ],
     assets: [
       { path: "Assets/Art/Environment/Terrain_Albedo.png", type: "Texture2D", bytes: 24.8 * 1024 * 1024, fix: "texture", saving: "18.6 MB" },

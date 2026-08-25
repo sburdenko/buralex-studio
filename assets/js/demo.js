@@ -17,11 +17,11 @@
     checkup: { view: 0, profile: "Mobile", fixed: [], expanded: [], scanned: false, wizard: null },
     assets: { view: 0, deadScanned: false, dupScanned: false, importScanned: false, quarantined: [], ignored: [], importFixed: [], importSkipped: [] },
     build: { view: 0, made: false, tile: 0, fixed: [] },
-    hunter: { phase: "idle", frames: [], elapsed: 0, cleared: 0 },
+    hunter: { phase: "idle", frames: [], elapsed: 0 },
     compile: { analyzed: false, removed: [], ignored: [] }
   };
 
-  var timers = { hunt: null, toast: null };
+  var timers = { hunt: null };
   var toastSeq = 0;
 
   /* ---------------- helpers ---------------- */
@@ -52,7 +52,8 @@
   function toast(message) {
     toastSeq += 1;
     var entry = { id: toastSeq, message: message };
-    state.toasts = state.toasts.concat([entry]).slice(-3);
+    var others = state.toasts.filter(function (item) { return item.message !== message; });
+    state.toasts = others.concat([entry]).slice(-2);
     render();
     window.setTimeout(function () {
       state.toasts = state.toasts.filter(function (item) { return item.id !== entry.id; });
@@ -439,12 +440,7 @@
     if (selected) {
       out += '<div class="ws-card"><div style="font-weight:700;color:var(--amber)">' + esc(selected.name) + "</div>";
       out += '<div class="ws-muted">' + Math.round((selected.bytes / D.BUILD.totalBytes) * 100) + "% of the full build · " + selected.count + " assets · " + bytes(selected.bytes) + "</div>";
-      out += '<div class="ws-stack">' + D.BUILD.assets
-        .filter(function (a) { return groupOf(a) === selected.name; })
-        .slice(0, 5)
-        .map(function (a) { return a.path + "  —  " + bytes(a.bytes); })
-        .map(esc)
-        .join("\n") + "</div></div>";
+      out += '<div class="ws-stack">' + tileContents(selected).map(esc).join("\n") + "</div></div>";
     }
 
     out += '<div class="ws-title">Top assets by size</div>';
@@ -491,6 +487,16 @@
     return "Other";
   }
 
+  /** Code and Shaders have no per-asset rows: one is a single binary, the other is
+      counted by variant. Saying so beats an empty box under the tile. */
+  function tileContents(group) {
+    if (group.rows) return group.rows;
+    return D.BUILD.assets
+      .filter(function (asset) { return groupOf(asset) === group.name; })
+      .slice(0, 5)
+      .map(function (asset) { return asset.path + "  —  " + bytes(asset.bytes); });
+  }
+
   function renderBuildDiff() {
     if (!state.build.made) {
       return '<div class="ws-empty"><h4>No build data yet</h4><p>Two captured builds are needed before they can be compared.</p>' +
@@ -532,17 +538,24 @@
     return D.HUNT_OFFENDERS.slice(0, unlocked);
   }
 
+  /** The headline rate is the average of the recorded frames, not the sum of the
+      offender list: the graph, the tiles and the verdict then all describe the same
+      series, instead of an average that reads higher than the total above it. */
+  function frameAverage() {
+    var frames = state.hunter.frames;
+    if (!frames.length) return huntBytesPerFrame();
+    return frames.reduce(function (a, b) { return a + b; }, 0) / frames.length;
+  }
+
   function huntLiveHTML() {
     var frames = state.hunter.frames;
     var recording = state.hunter.phase === "recording";
-    var perFrame = huntBytesPerFrame();
     var peak = frames.length ? Math.max.apply(null, frames) : 0;
-    var average = frames.length ? frames.reduce(function (a, b) { return a + b; }, 0) / frames.length : 0;
 
     var out = '<div><div class="ws-live__k">' + (recording ? "Recording" : "Recorded") + '</div><div class="ws-live__v">' + frames.length + " frames</div></div>";
-    out += '<div><div class="ws-live__k">From your scripts</div><div class="ws-live__v is-hot">' + bytes(perFrame) + " / frame</div></div>";
-    out += '<div><div class="ws-live__k">Average</div><div class="ws-live__v">' + bytes(average) + " / frame</div></div>";
+    out += '<div><div class="ws-live__k">From your scripts</div><div class="ws-live__v is-hot">' + bytes(frameAverage()) + " / frame</div></div>";
     out += '<div><div class="ws-live__k">Peak</div><div class="ws-live__v">' + bytes(peak) + " in one frame</div></div>";
+    out += '<div><div class="ws-live__k">Traced</div><div class="ws-live__v">94%</div></div>';
     return out;
   }
 
@@ -575,7 +588,6 @@
     }
 
     var recording = state.hunter.phase === "recording";
-    var perFrame = huntBytesPerFrame();
 
     var out = '<div class="ws-bar">';
     out += recording ? button("hunt-stop", "Stop Hunt", "ws-btn--primary") : button("hunt-start", "Start Hunt", "ws-btn--primary");
@@ -589,13 +601,14 @@
     if (recording) {
       out += '<div class="ws-card ws-card--flat ws-muted">Recording frames. Play your game, then stop the hunt to see allocations traced to project code.</div>';
     } else {
-      var perSecond = perFrame * 60;
-      var verdictClass = perFrame > 1500 ? "is-crit" : perFrame > 400 ? "is-warn" : "is-ok";
-      var verdictText = perFrame > 1500
-        ? bytes(perFrame) + " per frame — about " + bytes(perSecond) + " per second. Expect regular hitches."
-        : perFrame > 400
-          ? bytes(perFrame) + " per frame — about " + bytes(perSecond) + " per second. Collections will interrupt longer sessions."
-          : bytes(perFrame) + " per frame — about " + bytes(perSecond) + " per second. Not worth chasing.";
+      var perFrameRate = frameAverage();
+      var perSecond = perFrameRate * 60;
+      var verdictClass = perFrameRate > 1500 ? "is-crit" : perFrameRate > 400 ? "is-warn" : "is-ok";
+      var verdictText = perFrameRate > 1500
+        ? bytes(perFrameRate) + " per frame — about " + bytes(perSecond) + " per second. Expect regular hitches."
+        : perFrameRate > 400
+          ? bytes(perFrameRate) + " per frame — about " + bytes(perSecond) + " per second. Collections will interrupt longer sessions."
+          : bytes(perFrameRate) + " per frame — about " + bytes(perSecond) + " per second. Not worth chasing.";
       out += '<div class="ws-verdict ' + verdictClass + '"><b>' + esc(verdictText) + "</b>";
       out += '<div class="ws-muted" style="margin-top:6px">The collector ran 7 times in 12.4 s — about every 1.8 s — costing 4.1 ms on average, worst 9.7 ms. Those are the hitches you feel.</div>';
       out += '<div class="ws-muted" style="margin-top:4px">Previous hunt: 214 KB per second. Now ' + bytes(perSecond) + " per second — up 18%.</div>";
@@ -761,7 +774,6 @@
     TABS.forEach(function (label, index) {
       html += '<button class="ws-tab' + (index === state.tab ? " is-on" : "") + '" data-act="tab" data-id="' + index + '">' + esc(label) + "</button>";
     });
-    html += '<button class="ws-tab ws-tab--fixed" data-act="options">Options ▾</button>';
     html += "</div>";
 
     if (state.tab === 0) html += renderCheckup();
@@ -796,10 +808,6 @@
     "checkup-view": function (id) { state.checkup.view = Number(id); },
     "assets-view": function (id) { state.assets.view = Number(id); },
     "build-view": function (id) { state.build.view = Number(id); },
-    options: function () {
-      toast("Options ▾ — Share report, Use Unity's default look, and the ignore lists for every tab. Not wired up in the demo.");
-    },
-
     profile: function (_, element) {
       state.checkup.profile = element.value;
       toast("Profile set to " + element.value + ". Rules that only apply to this target are re-evaluated.");
@@ -925,7 +933,7 @@
     },
 
     "hunt-start": function () {
-      state.hunter = { phase: "recording", frames: [], elapsed: 0, cleared: 0 };
+      state.hunter = { phase: "recording", frames: [], elapsed: 0 };
       startHunt();
     },
     "hunt-stop": function () {
@@ -943,7 +951,7 @@
     },
     "hunt-reset": function () {
       stopHunt();
-      state.hunter = { phase: "idle", frames: [], elapsed: 0, cleared: 0 };
+      state.hunter = { phase: "idle", frames: [], elapsed: 0 };
     },
 
     analyze: function () {
