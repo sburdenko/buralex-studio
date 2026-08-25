@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sburdenko.github.io/buralex-studio/sitemap.xml
