@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhySlow Changelog | Buralex.Studio</title>
+<meta name="description" content="Every released version of WhySlow and what changed in it.">
+<meta property="og:title" content="WhySlow Changelog">
+<meta property="og:description" content="Every released version of WhySlow and what changed in it.">
+<meta property="og:image" content="assets/img/buralex-banner-900x600.png">
+<link rel="canonical" href="https://sburdenko.github.io/buralex-studio/whyslow-changelog.html">
+<link rel="icon" href="assets/img/buralex-logo-200x200.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/docs.css">
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-bolt" viewBox="0 0 16 16"><path d="M9 1 3 9h4l-1 6 6-8H8l1-6z"/></symbol>
+  <symbol id="i-script" viewBox="0 0 16 16"><path d="M3 1h7l3.5 3.5V15H3V1zm6.5 1v3H12L9.5 2zM5 7h6v1H5V7zm0 2.5h6v1H5v-1zm0 2.5h4v1H5v-1z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><path d="M10.6 9.2a5 5 0 1 0-1.4 1.4l3.4 3.4 1.4-1.4-3.4-3.4zM6.5 9.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 16 16"><path d="M8 1l6 2.2v4.5c0 3.6-2.5 6.4-6 7.3-3.5-.9-6-3.7-6-7.3V3.2L8 1z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 16 16"><path d="M1 3h14v10H1V3zm1.6 1L8 8.2 13.4 4H2.6z"/></symbol>
+</svg>
+
+<div class="menubar">
+  <a class="menubar__logo" href="index.html">
+    <img src="assets/img/buralex-logo-200x200.png" alt="Buralex Studio logo">
+    <b>Buralex<i>.Studio</i></b>
+  </a>
+  <a class="menubar__item" href="index.html#products">Products</a>
+  <a class="menubar__item" href="whyslow.html">WhySlow</a>
+  <a class="menubar__item" href="demo.html">Demo</a>
+  <a class="menubar__item" href="index.html#principles">Principles</a>
+  <a class="menubar__item" href="index.html#studio">Studio</a>
+  <a class="menubar__item" href="index.html#contact">Contact</a>
+  <div class="menubar__spacer"></div>
+  <div class="menubar__right">
+    <span class="menubar__dot"></span>
+    <span>Unity 2021.3 &rarr; Unity 6</span>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="toolbar__title"><b>WhySlow</b> — Changelog — com.buralex.whyslow</div>
+  <a class="tb-ghost" href="whyslow.html">← Product page</a>
+  <a class="tb-cta" href="mailto:sburdenko@gmail.com?subject=WhySlow%20question"><svg style="width:11px;height:11px;fill:currentColor"><use href="#i-mail"/></svg> Ask a question</a>
+</div>
+
+<div class="doc__wrap">
+  <section class="panel">
+    <div class="panel__tabs"><a class="tab" href="whyslow.html"><svg><use href="#i-bolt"/></svg> WhySlow</a><a class="tab" href="whyslow-docs.html"><svg><use href="#i-script"/></svg> Documentation</a><span class="tab is-active"><svg><use href="#i-search"/></svg> Changelog</span><a class="tab" href="whyslow-license.html"><svg><use href="#i-shield"/></svg> License</a></div>
+    <article class="doc">
+<h1>Changelog</h1>
+<p>All notable changes to this package are documented here.</p>
+<p>The format follows <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>. This package is <code>0.y.z</code>: per <a href="https://semver.org/#spec-item-4">Semantic Versioning</a>, anything may still change. While on <code>0.x</code>, a MINOR bump means a new capability, a PATCH bump means a backward-compatible fix.</p>
+<h2 id="0-37-0-2026-08-26">[0.37.0] - 2026-08-26</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>The hunt watches the managed heap and says the word Unity's own graph leaves to the reader. A heap graph beside the allocation sparkline shows the shape of the hunt, and a verdict reads the low points between collections: a sawtooth returning to its floor is healthy churn; a floor that keeps rising across recent collections "looks like a leak", with how much it rose. The bar is deliberately high — several collections, a long enough run, growth judged over the recent window so warm-up that settles is never accused — and when the evidence is thin the tab says so instead of guessing. No new measurement: the readings come from the recorders and collection events the pause tracker already had.
+</li></ul>
+<h2 id="0-36-0-2026-08-26">[0.36.0] - 2026-08-26</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Stopping a hunt summarises what the live scan already collected instead of re-reading up to 300 profiler frames behind a progress bar. Stop is instant, a hunt of any length reports its whole duration, and frames the profiler's ring buffer had already evicted no longer silently vanish from the results. Card graphs are windowed to the last 240 frames and say so; every number covers the whole hunt.
+</li>
+<li>The hunt's verdict is computed from one measurement, not two. Previously the "traced" count came from the last ~300 frames while the "scanned" totals came from the whole hunt, so a long session whose allocations happened early was reported as "Untraced" — sending the user to Deep Profile for garbage that was not there any more.
+</li>
+<li>Six scene fixes left the one-click batch: shadow distance, shadow resolution, MSAA, terrain draw distances, realtime GI and reflection-probe refresh. Each changes what the player sees, or writes a project-wide setting judged from one open scene — the batch's own rule is that nothing in it needs to be looked at afterwards. Every one is still a single click on its own row.
+</li>
+<li>The texture compression fix states its estimated saving, the way the audio and mesh fixes already did.
+</li>
+<li>The "sizes describe the last build" note now appears after any importer fix — audio and mesh included, not just textures — and survives a domain reload; it clears when the next build is captured.
+</li>
+<li>The report card states garbage per frame whenever two hunts exist, better or worse. A number that only appeared when it improved made every card silently flattering.
+</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Code inside a string interpolation hole is scanned again. <code>$"{GetComponent&lt;Foo&gt;()}"</code> was blanked along with the text around it, hiding a real per-frame lookup from every rule — and a string literal nested inside a hole could desynchronise literal tracking for the rest of the file.
+</li>
+<li>Methods returning a multi-parameter generic — <code>Dictionary&lt;string, int&gt; Foo()</code> — are visible to the scanner again. The declaration pattern allowed no space after the comma, so the common style made the whole method invisible to the call graph.
+</li>
+<li><code>CachedGetComponent&lt;T&gt;()</code> — the helper the advice tells the user to write — is no longer re-flagged forever: the GetComponent and AddComponent rules now require the name to start at an identifier boundary.
+</li>
+<li>Clicking Fix on a finding whose object was deleted after the scan no longer throws out of the window; the failure is logged and the re-scan reports what is actually there. The batch already behaved this way; the single fix and the wizard now match it.
+</li>
+<li>A corrupted quarantine manifest — a crash mid-write can truncate it — no longer takes down the whole Project Assets tab from its constructor. It is reported to the Console and the quarantined files stay recoverable by hand or from the backup package.
+</li>
+<li>A build-history file with an unreadable date no longer throws inside the diff view; the stored text is shown instead, matching how the overview already handles it.
+</li>
+<li>Scene checks and Compile Time's Analyze run behind a cancelable progress bar. One scene rule reads project source files on its first run after a reload, and the assembly walk has frozen the editor on a large project before — both were uninterruptible.
+</li></ul>
+<h3 id="added">Added</h3>
+<ul>
+<li>The Options menu can clear assets muted for the Import Watcher, with a count, like every other ignore list the tool keeps.
+</li>
+<li><code>LICENSE.md</code> in the package root, so the Package Manager's license view has something to show.
+</li>
+<li>Tests for the hunt summary: outcome classification, whole-hunt averages, behaviour badges and the series copy, plus the interpolation-hole and declaration-pattern parser cases above.
+</li></ul>
+<h2 id="0-35-0-2026-08-20">[0.35.0] - 2026-08-20</h2>
+<h3 id="removed">Removed</h3>
+<ul>
+<li>The fixed-timestep rule. It compared two settings to each other and never looked at what physics costs, so it fired on a scene of 200 static colliders worth 0.08 ms a frame and stayed silent on 300 rigidbodies eating 9 ms of a 16 ms frame -- inverted against what matters. It also fired on Unity's own stock 0.02 timestep on every mobile scene containing any collider, telling a user who had changed nothing that their physics settings were wrong, and advising a value aimed at 30 fps to projects targeting 60. The frame rate it judged against came from <code>Application.targetFrameRate</code>, which in the editor is -1 until some play session sets it, so the verdict flipped between "warns on everything" and "never warns" depending on whether the user had entered play mode since the last recompile.
+</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Two hunts are now compared per second, each converted using its own recorded frame rate. Both used to be converted with the current hunt's, which restated the baseline at a rate it was never measured at: a project that went from 30 to 60 fps without changing a line generated twice the garbage per second and read as "no measurable change". A baseline recorded before the rate was stored is shown per frame instead of borrowing one, and says why.
+</li>
+<li>Duplicate detection no longer groups empty files. Every empty file has the same length and the same content hash, so an empty script, an empty json and an empty placeholder arrived as one group of duplicates sharing nothing but being empty -- and a group of empty files frees zero bytes however it is resolved.
+</li></ul>
+<h2 id="0-34-0-2026-08-20">[0.34.0] - 2026-08-20</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Build X-Ray copies the current build's report to the clipboard: platform and date, the size that ships, each group's size and share, the largest assets, and the files the build wrote by kind. A treemap cannot be pasted into an issue.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Every share of a build is now taken against what the build actually ships -- the APK or AAB when there is exactly one, otherwise the written files minus IL2CPP's generated source and debug symbols. Unity's own total counts a package alongside the files compressed into it: a real Android build reported 1184 MB for a 256 MB install, which put "Resources is 16.9% of the build" out by more than four times. Where the two numbers differ the screen now states Unity's and why it is larger.
+</li>
+<li>The overview, the history list and the two-build comparison all use that same number, instead of two of them quietly using Unity's.
+</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>A build is recorded as soon as its asset list exists, rather than only once it has settled. A domain reload in between used to take the deferred pass with it, and the build was lost with nothing said -- which is why a second build could leave the tab still showing the first.
+</li>
+<li>The tab notices a newer build on disk on its own, so it no longer depends on a notification surviving that same reload.
+</li>
+<li>A successful build that packed no assets is reported instead of being recorded over the previous build's asset list.
+</li>
+<li>A treemap tile too short for its stacked labels now shows its name instead of nothing.
+</li></ul>
+<h2 id="0-33-1-2026-08-20">[0.33.1] - 2026-08-20</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>A logger the compiler strips was reported anyway.</strong> <code>[Conditional("ENABLE_LOGGING")]</code> on a method means every call to it disappears unless that symbol is defined — which is the whole point of writing one that way. In a project that defines it nowhere, the body cannot run, and the finding inside it was the only one in that scan with no guarded label: the most confident entry on the list and the only entirely false one. Such a method is now excluded like code behind a <code>#if</code>, and calling it does not make anything hot. Several attributes are an or, and one defined symbol is enough to keep it scanned.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>The string-allocation advice no longer recommends a StringBuilder to code that already has one. <code>sb.Append($"{a}{b}")</code> builds the string before the builder ever sees it, so the fix is to append the parts, not to adopt a builder.
+</li></ul>
+<h2 id="0-33-0-2026-08-20">[0.33.0] - 2026-08-20</h2>
+<p>Five findings from a real project that were wrong in ways the list could not show.</p>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>One statement counted several times.</strong> A log call whose interpolated parts are joined across three lines produced three findings — one allocation, three entries, and a headline count inflated by however many multi-line statements a project has. A rule now reports a given statement once, however many lines it spans.
+</li>
+<li><strong>Code that cannot compile into the player was reported anyway.</strong> Those findings sat inside <code>#if ENABLE_DEBUG</code>, in a project that defines <code>ENABLE_DEBUG</code> nowhere. Preprocessor conditions are now decided against the defines each assembly is actually compiled with, taken from the compilation pipeline — the project's own Scripting Define Symbols plus Unity's platform and version symbols. A symbol absent from that set is provably absent, not unknown. Where there is no assembly to ask, an unrecognised symbol still means "scan it", so nothing is hidden on a guess.
+</li>
+<li><strong>A coroutine's epilogue was reported as per-frame work.</strong> <code>while (!request.IsFinished) yield return null;</code> makes a coroutine genuinely repeating, and the whole method was then treated as hot — including the statements after the loop, which run exactly once. A repeating coroutine is now hot only across the loops that repeat.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Advice follows the situation where one pattern covers several.</strong> "Remove it" on a base class's <code>protected virtual void Update() {}</code> would break every subclass that overrides it, and is replaced by advice that says so. "Reuse objects with a pool" on <code>Destroy(renderTexture)</code> described resource cleanup as churn; <code>Destroy</code> without a matching <code>Instantiate</code> now names both possibilities instead of asserting the wrong one.
+</li></ul>
+<h2 id="0-32-4-2026-08-20">[0.32.4] - 2026-08-20</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Scan Code reported on a vendored copy of TextMeshPro.</strong> A team that needs to patch one of Unity's packages keeps a copy inside the project and references it by file path, which makes it Local -- for a reason that has nothing to do with who wrote it. The scan read that as "the user owns this" and read 59 of TextMeshPro's runtime scripts, pushing the user's own findings down the list; one category held a single finding and it was Unity's code. A package in Unity's own namespace is now never treated as the user's, however it is referenced. Anything outside that namespace stays in scope: guessing at who wrote <code>com.somevendor.thing</code> would risk hiding the user's own code, which is the worse mistake.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>The scope note above the results says what is actually scanned -- your own code, wherever it lives -- instead of describing only which methods count as hot.
+</li></ul>
+<h2 id="0-32-3-2026-08-20">[0.32.3] - 2026-08-20</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Scan Code asks the compilation pipeline which scripts to read, instead of walking the asset database and guessing.</strong> Two questions decide whether a script is worth reading -- does it reach a player build, and does it belong to this project -- and neither answers the other: URP, the Input System and TextMeshPro all ship to the player without being anyone's to fix, while an editor-only assembly is the user's code that never runs in a build. Both were being asked once per file, from the file's path, after enumerating the asset database to find the files at all. They are now asked once per assembly, and the file list comes from the assembly's own sources -- which is what the compiler will actually build. On this project that is 33 questions instead of 255, with no asset enumeration; the set of scripts scanned is unchanged.
+</li></ul>
+<h2 id="0-32-2-2026-08-20">[0.32.2] - 2026-08-20</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Scan Code enumerated every installed package before filtering most of them out.</strong> The search covered the whole "Packages" virtual root, which Unity resolves to every registry and git package's compiled scripts, not just the ones this project owns -- on a project with a normal package list that is thousands of GUIDs paid for and thrown away one by one. The search now covers Assets plus the asset path of each package actually Embedded or Local, so the scan no longer enumerates code it was always going to discard.
+</li></ul>
+<h2 id="0-32-1-2026-08-20">[0.32.1] - 2026-08-20</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>The manual was never in the repository.</strong> <code>Documentation~</code> matches the common <code>*~</code> ignore rule, so the commit that added <code>Documentation~/index.md</code> committed everything except the file it was about. Anyone installing the package from git got no manual, and the Package Manager Documentation link led nowhere -- exactly the problem that commit said it had fixed. The file is tracked now, and the offline check fails if any file under the package is missing from git.
+</li>
+<li>The manual described Import Settings as covering meshes and textures. It now covers the audio and texture-compression checks as well, including which of them deliberately refuse to batch.
+</li></ul>
+<h2 id="0-32-0-2026-08-20">[0.32.0] - 2026-08-20</h2>
+<p>A full audit of the package, and the fixes it produced. Two of these were the tool telling the user something that was not true.</p>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Half the import fixes could not actually be undone.</strong> The backup recorded three or four importer fields chosen when the first fixes were written; every fix added afterwards changed something outside that set, and Restore put back the fields it knew about while reporting success. Mipmaps, Read/Write, sample rate, force-to-mono, rig type and blend shapes were all in that gap. The backup now records an importer's complete permitted settings, for every platform, and carries a schema version so a record written by an older build is skipped rather than restoring a default over a setting it never captured.
+</li>
+<li><strong>Fix All in Import Settings discarded its own backups.</strong> It opened one backup operation per asset against a store that keeps the twenty most recent, so a run over thirty assets pushed its earliest entries out before it finished. One run is now one operation, one reimport batch and one undo step, and the backup is committed before the first setting is written.
+</li>
+<li><strong>Removing an assembly reference could not be taken back</strong>, though the screen offering it said it could. The original asmdef is now kept and there is a "Put it back" beside the removal. The edit is also confined to the references array — it matched anywhere in the file, so an assembly whose name matched its own <code>rootNamespace</code> had that line removed instead.
+</li>
+<li><strong>A GUID-form reference resolved to the asmdef's file name rather than the assembly's name.</strong> Where an asmdef had been renamed, a reference plainly in use was reported as unused, and the Remove button then did nothing.
+</li>
+<li><strong>The package did not compile on Unity 2021.3</strong>, which is the version it claims to support: the physics-simulation rule used an API added in 2022.2 with no fallback.
+</li>
+<li><strong>Dead Assets offered live assets for quarantine.</strong> Settings assets registered in Build Settings by packages such as the Input System or Localization, render pipeline assets assigned to a quality level, anything carrying an AssetBundle name, and shader includes were reachable from nowhere the scan looked. Scenes present in Build Settings but unticked are now roots too.
+</li>
+<li><strong>Plugins code was treated as editor code</strong> when deciding whether anything reads mesh or texture data at runtime, so a plugin that does read it was invisible and the Read/Write batch fix was offered anyway.
+</li>
+<li><strong>Quarantining could leave files unrecoverable.</strong> The manifest listed the whole plan before anything moved, so a move that failed part-way left Restore refusing the entire session — the files that had moved could not be brought back from the window at all.
+</li>
+<li><strong>Full garbage collections were never counted.</strong> Only the incremental collector's marker was matched, so a project with incremental collection turned off — the project the "turn it on" advice is written for — always read as having no collector pressure.
+</li>
+<li><strong>A clean project could not be reported as clean.</strong> The verdict was classified from a process-wide allocation counter that also reads the editor's own allocations, so a game that allocated nothing got a red "could not trace any of it" and was never saved as a baseline.
+</li>
+<li><strong>Clear brought back what it had just cleared.</strong> Scanning resumed from the oldest frame the profiler still held, so the loading-screen spike reappeared immediately.
+</li>
+<li><strong>Allocations past the first 4096 samples in a frame were dropped silently</strong>, which is most of them once deep profiling — which the tool itself recommends — is on.
+</li>
+<li><strong>The code scan misread ordinary C#.</strong> An expression-bodied member or an interface declaration claimed the next method's body, so cold code was reported as running every frame; a <code>#if UNITY_EDITOR</code> at the top of a file marked everything below it as conditional; a brace-less <code>if</code> or <code>switch</code> leaked into the following method; a literal ending in an escaped backslash swallowed the rest of its line; generic methods were invisible entirely. The parser now builds one map of the file that every check reads, and each of these has a test.
+</li>
+<li><strong>Four scan rules reported things that were not the problem</strong>: any <code>+</code> on a line with a string literal, the <code>.material</code> setter, <code>PlayerPrefs</code> keys, and <code>Selectable.Select()</code>.
+</li>
+<li><strong>The window could not open at all</strong> if <code>Library/WhySlow</code> held an unreadable file. One tab failing to start no longer takes the other four with it.
+</li>
+<li><strong>The shader-timing pattern matched nothing</strong> on a real project, and re-read the entire editor log — which can reach hundreds of megabytes — on every build. It now reads only what the build itself wrote.
+</li>
+<li>A build that packed nothing no longer records itself using the previous build's asset list.
+</li>
+<li>Scene-view outlines follow an object while it is being moved.
+</li>
+<li>Missing scripts, and every other scene rule, now see inactive objects.
+</li>
+<li>The theme no longer leaks a set of textures on every skin change and domain reload.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>"Safe to batch" now means safe without being looked at.</strong> Fixes that change what the game looks like, change how input behaves, or write a project-wide setting inferred from one open scene are still offered individually, but Fix All no longer applies them: physics simulation, far clipping plane, animator culling, WebGL compression. The raycast-target fix no longer treats a ScrollRect or a custom input handler as inert, and the mesh-collider rule no longer flags the kinematic case, which is valid.
+</li>
+<li><strong>The Build X-Ray texture fix only turns compression on.</strong> It also lowered Max Size and switched crunch on, both of which trade image quality for bytes — a decision the tool cannot make from here, and one this project's own notes had already ruled out.
+</li>
+<li><strong>Load Type is decided in one place.</strong> Build X-Ray judged it by clip length while Import Settings judged it by file size, and on ordinary clips each undid the other on every scan.
+</li>
+<li><strong>Cost to touch an assembly is now measured rather than modelled.</strong> It summed each affected assembly's solo compile time, which counted the fixed per-round overhead once per assembly, assumed Unity compiles them one after another, and could never price a hub at all — an assembly with dependents never compiles alone. It is now the median duration of the compilation rounds that actually started at that assembly. Domain reload is measured too.
+</li>
+<li>Terrain detail is judged on the distances a user raises deliberately, not on Unity's own defaults, which the previous thresholds flagged on every fresh terrain.
+</li>
+<li>Shadow distance and resolution under URP and HDRP read and write the pipeline asset. They read Quality Settings, which an SRP ignores, so the finding was wrong and the fix changed nothing.
+</li>
+<li>WebGL checks stay silent outside a WebGL profile instead of passing with a false statement.
+</li></ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li><strong>The mobile frame-pacing rule.</strong> It judged a project setting from <code>Application.targetFrameRate</code> read in the editor, which is a runtime value, and its premise — that VSync wastes frames on mobile — does not hold, because mobile platforms ignore VSync.
+</li></ul>
+<h3 id="added">Added</h3>
+<ul>
+<li>The package has tests: 59 covering the code scanner's parser and its rules, each one pinned to a case that was previously wrong.
+</li>
+<li>Preferences and Share report are documented, along with where backups live and what that means.
+</li></ul>
+<h2 id="0-31-2-2026-08-19">[0.31.2] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>The lossy-source check claimed every flagged clip gets re-encoded. That is true only when the clip is built to a compressed format; a clip stored as PCM is decoded once and kept, so the original encode is the only loss. The reason now names the format the clip actually builds to and says which of the two situations it is.
+</li>
+<li>Cost to touch said "1 other assemblies rebuild with it", and reported an assembly nothing depends on as a count of zero rather than as the plainer fact that nothing else rebuilds with it.
+</li></ul>
+<h2 id="0-31-1-2026-08-19">[0.31.1] - 2026-08-19</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Everything that folds is amber, everywhere: dead-asset branches, groups and subfolders, duplicate sets, import checks and code-scan categories. Terminal rows -- a single file, a single duplicate -- stay blue links. The colour now says the same thing the triangle does: amber opens, blue selects.
+</li></ul>
+<h2 id="0-31-0-2026-08-19">[0.31.0] - 2026-08-19</h2>
+<h3 id="removed">Removed</h3>
+<ul>
+<li><strong>The quarantine tick boxes and the bulk button they fed.</strong> Every row -- branch, group, subfolder, file -- already carries a Quarantine button that acts on exactly what the row names, which is the same job done more directly: no state to build up, and no way to press a button whose meaning is spread across a screen you have scrolled past.
+</li></ul>
+<p>The explanation of what quarantine does, and the note that Restore All undoes one run at a time, stay where the button used to be.</p>
+<h2 id="0-30-0-2026-08-19">[0.30.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Four audio import checks</strong>, the category the tab had nothing to say about. Load Type against clip size, sample rate above the mobile ceiling, multichannel clips not forced to mono, and sources that are already lossy. All four come from the table in Unity's optimization guide.
+</li>
+<li><strong>Textures built without compression</strong>, which that guide calls the biggest win in its asset chapter -- its own comparison puts an uncompressed texture at roughly 26x the cost with little visible difference. The fix turns compression on and leaves the format Automatic: which compressed format is right depends on the oldest device a project supports, so the tool never writes ASTC, PVRTC or ETC2 into an importer on the developer's behalf.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>A hot-path finding in a method that is only reached through a branch is now reported as Guarded rather than Confirmed. Being called from Update means the call site runs every frame, not the method -- an ad reload behind a countdown runs when the countdown expires.
+</li></ul>
+<h2 id="0-29-0-2026-08-19">[0.29.0] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Scan Code reported allocations inside catch blocks as "per frame".</strong> Reaching a method from Update says the method runs every frame; it says nothing about its error handling. On a real project an ad manager's Update called a reload helper whose only flagged lines were the two log calls in its catch blocks -- code that runs when loading an ad fails, not sixty times a second. Lines inside a catch are now dropped rather than downgraded: if they really did run every frame, the exception would cost far more than the string.
+</li>
+<li>The scope note claimed only Update, LateUpdate, FixedUpdate, OnGUI and coroutines were reported. The scan has always followed calls out of those, three levels deep within a file, which is why a finding could name a method the note said would never be scanned. It now says so.
+</li></ul>
+<h2 id="0-28-5-2026-08-19">[0.28.5] - 2026-08-19</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Duplicates now reads like the rest of the window: each set of identical files is a foldout, the list is paged, and every path is a link that selects the asset. It was the last list still printing every member of every group as plain text with no separation, which is the one place it matters -- choosing which copy to keep means opening them.
+</li></ul>
+<h2 id="0-28-4-2026-08-19">[0.28.4] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>The texture check counted its findings as "9 meshes". The shared list widget hardcoded the vocabulary of the check it was written for, so every check that came later borrowed it -- textures, models and animation clips were all reported as meshes. Each check now says what it counts, and a single finding reads "1 texture" instead of "1 textures".
+</li></ul>
+<h2 id="0-28-3-2026-08-19">[0.28.3] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Folder rows in the dead-asset tree had two different backgrounds and two different right edges. Group rows were still wrapped in the card they were given when a group was a top-level item on a flat page; branch rows, added with the tree, never had one. The card's padding also pushed their buttons inward, so the two button columns did not line up. Indentation carries the structure now, the way the Project window does it, and every row is built the same way.
+</li>
+<li>A group nested under a branch drew its own subfolders at a fixed indent instead of one step in from itself, so at depth two they appeared to the left of their parent.
+</li></ul>
+<h2 id="0-28-2-2026-08-19">[0.28.2] - 2026-08-19</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Every folder row in the dead-asset tree now shows its full path, and carries the same pair of buttons: Quarantine, and Ignore folder acting on the folder that row names.
+</li>
+<li><strong>The Ignore folder menu is gone.</strong> It offered the folder and each of its parents, which existed only because the parents were invisible -- the list was flat and one third-party root produced six rows that all wanted the same single decision. The tree shows those parents as rows now, each with its own button, so the menu was offering a second way to do what is already one click above.
+</li></ul>
+<h2 id="0-28-1-2026-08-19">[0.28.1] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Folder rows in the dead-asset tree were amber while the folder rows beneath them were blue. Both are the same thing -- a folder you open -- and they now look the same. Amber stays on the headings a section is filed under, which is the only job it had.
+</li>
+<li>The three folder rows in that tree each carried their own copy of the arrow, the expand toggle and the link cursor. They share one control now.
+</li></ul>
+<h2 id="0-28-0-2026-08-19">[0.28.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Dead-asset results nest by folder.</strong> A folder holding three or more groups now gets its own closed row, so a project with a content root reads as <code>Assets/Addressables</code> and <code>Assets/Animations</code> instead of thirty paths sharing a prefix and differing in the tail. Folders holding one or two groups are dissolved rather than turned into a level that hides almost nothing, and a folder containing only one other folder collapses into a single <code>LevelEditor/Art</code> row.
+</li>
+<li><strong>Import-settings checks fold.</strong> All five open closed, showing title and count, so the tab is an overview of what was found rather than the first check's results at full length.
+</li>
+<li><strong>Scan Code groups findings by pattern</strong>, each foldable and paged.
+</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Scan Code showed at most 60 findings and silently dropped the rest.</strong> Paging replaces the cap, so nothing found is now unreachable.
+</li>
+<li>A check reporting 796 items pushed every later category off the end of a sixteen-page list. Texture import settings were there the whole time and effectively invisible.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Previous/Next pagers were written three times in three tabs and are now one control.
+</li></ul>
+<h2 id="0-27-2-2026-08-19">[0.27.2] - 2026-08-19</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>The row-level Quarantine buttons are amber, so the button that moves files no longer looks identical to the one beside it that only hides a row. Amber as an accent rather than a fill: the colour also carries section headings and the single bulk action, and twenty filled amber blocks down a list would leave none of the three meaning anything.
+</li></ul>
+<h2 id="0-27-1-2026-08-19">[0.27.1] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>The dead-asset scan crashed on any project with Addressables installed</strong>, and had since 0.26.1. Adding the progress bar moved the assignment of the published root summary to the end of a successful run, which was right, but Addressables detection wrote into that summary while the scan was still going -- so it wrote into null. The summary being built now travels as an argument, and the static holds finished scans only.
+</li>
+<li><strong>A failing scan took the window with it.</strong> The scan runs inside <code>OnGUI</code> between a <code>BeginScrollView</code> and its end, so an exception escaping into IMGUI left the layout stack unbalanced and Unity reported "Invalid GUILayout state" -- which names nothing that actually broke. The scan is now caught, logged, and reported in the tab as a failure that changed nothing.
+</li>
+<li>The offline layout check counted <code>BeginScrollView</code> where a comment merely named it, leaving the scroll view open for the rest of the file and flagging every plain <code>return</code> after it.
+</li></ul>
+<h2 id="0-27-0-2026-08-19">[0.27.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Dead-asset groups expand into a folder tree.</strong> Expanding a group used to spill every file beneath it into one flat column, which threw away the only structure available for judging them: a folder name is usually the whole reason a file is or is not still needed. Subfolders now nest and expand on their own.
+</li>
+<li><strong>Quarantine and Ignore on every level.</strong> A group row, a subfolder row and a single file row each carry both. The subfolder level is the one that was missing and the one most decisions actually happen at -- a group rolled up to a package root is too coarse to move in one go, and a single file is too fine to confirm two hundred times.
+</li>
+<li>Quarantine no longer requires ticking boxes first. The tick boxes still drive the bulk button at the bottom; the row buttons act on what the row names, after the same confirmation.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Groups are listed alphabetically by path.</strong> They were ranked by how abandoned each folder looked, which reads as no order at all when hunting for a folder you recognise -- and every row already prints that share, so the ranking bought nothing the row did not say.
+</li>
+<li><code>MoveToQuarantine</code> moves exactly the candidates it is handed instead of filtering them by a selection flag. Three routes now lead there, and only one of them involves a tick box.
+</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Ignoring a folder left its files inside any group rooted above it. Only groups at or below the ignored path were dropped, so a surviving parent group kept listing files that had just been dismissed. Every removal now goes through one path that also rebuilds the affected tree.
+</li></ul>
+<h2 id="0-26-1-2026-08-19">[0.26.1] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>The dead-asset scan looked frozen.</strong> It ran to completion with no progress bar, so on a large project the window simply stopped repainting for as long as the scan took. It now names the phase it is in -- listing assets, reading scripts for <code>Resources.Load</code> paths, following dependencies from the protected roots, checking sprite atlases, classifying -- and can be cancelled.
+</li></ul>
+<p>Cancelling discards the run rather than showing what it got to. A scan stopped halfway has not found fewer dead assets; it has missed roots, and every asset those roots protect would be listed as unused. That list is worse than no list.</p>
+<h2 id="0-26-0-2026-08-19">[0.26.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Documentation.</strong> The package now ships <code>Documentation~/index.md</code>, which is what the Documentation link in Package Manager opens — it previously led nowhere. It covers what each of the five tabs answers, what quarantine actually does to your files, what is deliberately never reported as dead and why, what the tool cannot see, and where dismissals live.
+</li></ul>
+<p>Two sections exist because someone had to ask: quarantine was a word on a button that nothing defined, and the exclusion rules were invisible, so a finding that looked wrong had no way to explain itself.</p>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>The README described a three-tab tool. It now describes the five that exist, and links to the documentation.
+</li></ul>
+<h2 id="0-25-0-2026-08-19">[0.25.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>"Use Unity's default look" in Options.</strong> Every control falls back to Unity's own styling — buttons, cards, headings, the window background and the severity colours — for anyone who would rather the tool looked like the rest of the editor. A custom look is a matter of taste, and taste is not something a diagnostic tool should insist on. The choice is remembered, and the styles rebuild when it changes.
+</li></ul>
+<h2 id="0-24-0-2026-08-19">[0.24.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Ignore a single file</strong>, next to each candidate. A folder was often too blunt: one deliberate leftover among live files should not require silencing everything around it. Kept by GUID, so the dismissal survives the file being moved or renamed, and listed with the ignored folders underneath.
+</li>
+<li><strong>An Options menu</strong> in the window header, holding the report and every dismissal the tool has been given — dead-asset ignores, skipped assets in Import Settings, assemblies marked not mine, and one item that clears all of them. Each shows its count. Dismissals are easy to make and easy to forget, and a tool told to stay quiet about enough things quietly stops finding anything; these counts are the only place that becomes visible.
+</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Dead Assets offered to delete the build's own configuration.</strong> <code>google-services.json</code>, <code>GoogleService-Info.plist</code>, <code>link.xml</code>, <code>NuGet.config</code> and <code>packages.config</code> were listed as unused. Unity, Gradle and Xcode go looking for these by name, so nothing references them and they are unreferenced by construction. The damage is invisible until it isn't: the Firebase files break it at runtime, and <code>link.xml</code> breaks only release builds, where code stripping then removes types nothing appeared to use. Matched by filename anywhere in the project, since <code>link.xml</code> legitimately appears in several folders at once.
+</li></ul>
+<h2 id="0-23-0-2026-08-19">[0.23.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>The Dead Assets screen now says what quarantine actually does</strong>, above the button rather than only inside the confirmation dialog. It is not deletion: each selected file and its <code>.meta</code> is moved out of <code>Assets</code> into a <code>WhySlow_StrippedAssets</code> folder beside the project, one folder per run, after a backup <code>.unitypackage</code> is exported alongside it. Unity then behaves as though the files were gone, which is how you find out whether anything needed them, and Restore returns every file to its original path and verifies its hash.
+</li></ul>
+<p>The tool asked people to press a button labelled "Move to Quarantine" while explaining the word nowhere they would read it first.</p>
+<h2 id="0-22-2-2026-08-19">[0.22.2] - 2026-08-19</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>A candidate filename now looks clickable, and clicking it selects the asset.</strong> It was drawn as plain label text, so nothing suggested it could be opened at all. It is now a link with a link cursor, its tooltip carries the full path, and clicking selects the asset as well as pinging it — the Inspector showing the thing is the whole reason for clicking, when the question being answered is "is this really unused?".
+</li></ul>
+<h2 id="0-22-1-2026-08-19">[0.22.1] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Dead Assets offered to quarantine the Firebase Android libraries.</strong> A scan listed every <code>.aar</code> and <code>.pom</code> under <code>GeneratedLocalRepo</code> as unused. Gradle resolves those at build time, so nothing in the asset graph ever points at one — they are unreferenced by construction, and removing them breaks the Android build outright.
+</li></ul>
+<p>Native libraries and build-system inputs now join scripts, assemblies and documentation as things never listed: <code>.aar</code>, <code>.jar</code>, <code>.pom</code>, <code>.so</code>, <code>.a</code>, <code>.dylib</code>, <code>.gradle</code> and the rest, plus anything inside a <code>.framework</code>, <code>.androidlib</code>, <code>.bundle</code> or <code>.plugin</code> folder. <code>.dll</code> was already excluded for exactly this reason; the same argument simply had not been extended to the other platforms.</p>
+<h2 id="0-22-0-2026-08-19">[0.22.0] - 2026-08-19</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>A folder where nothing at all is used is now reported as that one folder</strong>, not as each of its subfolders. A third-party package filled the first six groups — <code>GUI/NativeSkin/Dark</code>, <code>GUI/NativeSkin/Light</code>, <code>GUI/BRTSkin</code> and so on — when every file beneath its root was unused and the honest description was one line about the package. Groups now climb to the highest folder under which nothing is still in use, stopping one level below <code>Assets</code>.
+</li></ul>
+<p>Scripts and documentation do not block that climb. They are excluded from the list by rule rather than because something uses them, so a package folder holding its own scripts still counts as wholly unused — and for the same reason they no longer dilute the "N of M" share.</p>
+<h2 id="0-21-3-2026-08-19">[0.21.3] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>The folder checkbox looked like it was agreeing with a sentence.</strong> Its label was the folder summary — "Nothing in this folder is used (1 files)" — so ticking it read as confirming a statement rather than selecting files for quarantine. The summary is now a plain line and the checkbox says what it does: "Select all N for quarantine".
+</li></ul>
+<h2 id="0-21-2-2026-08-19">[0.21.2] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Dead Assets offered to delete a package's Readme.</strong> Documentation and licence files — <code>.txt</code>, <code>.md</code>, <code>.rtf</code>, <code>.pdf</code>, <code>.html</code>, <code>.chm</code> — are no longer listed. Unity does not put them in a player build unless they sit in Resources or StreamingAssets, both protected outright, so they cost nothing to keep, and having no references is exactly what documentation looks like. The finding was technically true and useless, and being told once to delete a README is how a list stops being trusted.
+</li></ul>
+<h2 id="0-21-1-2026-08-19">[0.21.1] - 2026-08-19</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Ignore folder now offers the parents too.</strong> A third-party package on a real project produced six separate groups under one root — six identical decisions where the user meant one, "this package is not mine to tidy". The button opens a menu of the folder and each of its parents, each showing how many candidates it would cover, and ignoring one clears every group beneath it at once.
+</li>
+<li>A folder with nothing in use now says so directly instead of "70 of 70 files here are unused (0 still in use)".
+</li></ul>
+<h2 id="0-21-0-2026-08-19">[0.21.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Dead Assets groups candidates by folder, and says how much of each folder is still in use.</strong> Three hundred and seventy-nine single rows said nothing about any of them. "26 of 29 files here are unused" says the folder was abandoned; "1 of 40" says someone left one file behind — and that difference is the decision being made. Folders are ordered with the most wholly-unused first, expand to see the files, and a folder's checkbox selects all of it at once.
+</li>
+<li><strong>Ignore folder</strong>, remembered across scans. A project accumulates places that are knowingly unreferenced — art for a feature not wired up yet, a sandbox — and re-reading the same hundred rows every scan is how a list stops being read at all. Ignored folders are listed at the bottom with an undo.
+</li></ul>
+<h2 id="0-20-0-2026-08-19">[0.20.0] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>A Sprite Atlas Unity refuses to hand over is now read from the file instead.</strong> On a real project one <code>.spriteatlasv2</code> came back null from <code>LoadAssetAtPath</code> while its neighbours in the same folder loaded fine — so its contents were never checked, and everything only it packed looked dead. The asset file always lists what it packs, as asset GUIDs, and reading those needs no successful import. Verified against that exact atlas: the fallback recovers all 11 packed folders, the first of which holds a sprite the room prefab uses, so the atlas and its contents are now protected.
+</li></ul>
+<p>The self-explaining findings added in 0.19.0 are what located this in one look, after the same atlas had survived a dozen checks that could not tell "read it and found nothing reachable" from "never read it at all".</p>
+<h2 id="0-19-0-2026-08-19">[0.19.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>A flagged Sprite Atlas now says why it was not protected</strong>, instead of giving the same generic line as every other candidate. It reports one of three things: the atlas could not be read as an atlas at all (Sprite Packer mode decides that, and its contents were never checked — so the finding explicitly says not to act on it); the atlas reports packing nothing; or it packs N entries and none of them is reachable from a protected root.
+</li></ul>
+<p>This came out of chasing a single atlas on a real project across a dozen checks without being able to tell whether its contents had been read and found unreachable, or never read at all — two different bugs that looked identical from outside. The number answers that in one glance.</p>
+<h2 id="0-18-0-2026-08-19">[0.18.0] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Dead Assets offered to quarantine sprites that ship inside a Sprite Atlas.</strong> Found on a real project: an atlas packed a folder of animation frames, and only frame 00 was wired into a prefab. Every other frame was referenced by nothing and duly listed as dead — while all of them ship, because an atlas is one texture and everything packed into it is in the build whether or not anything names those sprites individually. Deleting one would have changed the atlas that does ship.
+</li></ul>
+<p>0.3.2 fixed the other direction of the same blindness — protecting an atlas when a sprite it packs is used. This adds the inverse: when an atlas is in use, everything it packs is too, including whole folders it was pointed at. That folder case is exactly how a sprite reaches a build without a single reference to its name.</p>
+<h2 id="0-17-1-2026-08-19">[0.17.1] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Duplicates spammed the console with "Invalid GUILayout state" and "pushing more GUIClips than you are popping".</strong> Extracting the view into its own class in 0.16.0 left a <code>return</code> inside an open scroll view, so every repaint before the first scan leaked a clip. The method now has a single exit. <code>Tools/compile-check.sh</code> gained a check for this exact shape — it is invisible to the compiler and only shows up at runtime — and was confirmed to flag the broken version while passing the fixed one.
+</li></ul>
+<h2 id="0-17-0-2026-08-19">[0.17.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Dead Assets now states what it protected before listing what it wants to remove.</strong> The roots were invisible: "670 candidates" reads very differently next to "340 Addressables entries protected" than next to "0". If Addressables detection ever fails silently on some package version, every addressable asset becomes a candidate and nothing on screen would have said why — now the scan reports its build scenes, protected folders, <code>Resources.Load</code> matches and Addressables entries, and warns outright when Addressables is installed but yielded nothing.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Ordinary buttons are flat too.</strong> The theme had reached toolbars but not the 46 plain buttons across the window, which still carried Unity's bevel and outline.
+</li></ul>
+<h2 id="0-16-2-2026-08-19">[0.16.2] - 2026-08-19</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>The selected tab is filled rather than tinted.</strong> It now carries a lighter version of the colour a press produces, with near-black text — so a selected tab reads as held down, and clicking it again still darkens under the cursor. Hover is the lightest step of the same family, so pointing at a tab and landing on it read as one gesture rather than three unrelated colours.
+</li></ul>
+<h2 id="0-16-1-2026-08-19">[0.16.1] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>The selected tab was not highlighted.</strong> <code>GUILayout.Toolbar</code> draws the selected item using a style's "on" states, and the new flat style defined only the normal ones — so every tab rendered identically and there was no telling where you were.
+</li>
+<li><strong>The new <code>ProjectAssets</code> folder shipped without a <code>.meta</code></strong>, so Unity ignored it in an immutable package folder. The same failure as 0.15.1, one level up: that time a script, this time a folder. <code>Tools/compile-check.sh</code> now verifies every file <em>and</em> folder has one, so it cannot happen a third time.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Each palette colour now does one job.</strong> Amber was doing three at once — warning severity, the primary action, and the selected tab — which made it mean nothing. Amber is now section headings and the one primary action; the selected tab is cyan, because warnings are amber and a busy screen has many of them, so "you are here" needs to be separable from "this is a problem" at a glance. Teal stays the pressed state, a dimmer relative of cyan so hover and press read as one gesture.
+</li></ul>
+<h2 id="0-16-0-2026-08-19">[0.16.0] - 2026-08-19</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Project Assets is now its own tab.</strong> Dead Assets, Duplicates and Import Settings moved out of Build X-Ray, which needed a build for only two of its five views and said the wrong thing about the other three. They answer a question of their own — what has accumulated in the project, or is imported wrong — which is neither "is my scene set up well" (Checkup) nor "why is my build heavy" (Build X-Ray). Build X-Ray is now Overview and Build Diff, the two views that genuinely describe a build.
+</li>
+<li><strong>A flat dark theme drawn from the Buralex.Studio palette.</strong> Buttons and toolbars lose Unity's bevel and outline, surfaces recede, and severity colours come from the same palette — with one warm red added, since nothing in the mark carries urgency and a critical finding that cannot look urgent is one people scroll past.
+</li></ul>
+<h2 id="0-15-2-2026-08-19">[0.15.2] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Duplicate scanning filled the console with "Do not use ReadObjectThreaded on scene objects!"</strong> A regression from 0.15.0: widening the scan from a build's asset list to the whole project swept scene files in with everything else, and <code>LoadAllAssetsAtPath</code> must not be used on a scene — Unity logs that error for every object it touches, hundreds of them on a real project. Scenes are now skipped, along with assets that cannot hold a Material at all (textures, audio, fonts, shaders, scripts), which also makes the scan considerably faster.
+</li></ul>
+<h2 id="0-15-1-2026-08-19">[0.15.1] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>0.15.0 did not compile when installed as a package.</strong> <code>DuplicateScanScope.cs</code> shipped without its <code>.meta</code> file. Unity generates those on import, but a package installed from git lives in <code>Library/PackageCache</code> and is immutable — there Unity uses the <code>.meta</code> files the repository provides and ignores any script that has none, so the type simply did not exist. The file was committed without one because the editor was never able to import it while the change was written.
+</li></ul>
+<h2 id="0-15-0-2026-08-19">[0.15.0] - 2026-08-19</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Duplicates no longer needs a build.</strong> It sat behind the same "make a build first" wall as the Overview and Build Diff, which genuinely describe a build — but two identical files are identical whether or not the project has ever been built. The dependency turned out to be nominal: both finders took a list of build entries and used nothing from them but the path, opening and hashing the files from disk themselves. They now take paths, and Duplicates scans the project, so the answer is there on a project you just opened.
+</li></ul>
+<h2 id="0-14-0-2026-08-19">[0.14.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Asset Import pages its lists, 50 rows at a time.</strong> IMGUI lays out every control it is handed whether or not it ends up on screen, so a check flagging 796 meshes — a real number from a shipped project — paid that layout on every repaint and the editor stopped keeping up. Same page size Dead Assets already used. Each check keeps its own page, and the Skipped list is capped the same way.
+</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Dead Assets flagged the Addressables configuration itself.</strong> <code>AddressableAssetSettings</code>, its groups, the build scripts and the default object only ever reference each other, so nothing outside that folder points into it and every file in it read as unreachable — while quarantining any of it would take the project's whole Addressables setup with it. The folder holding the settings asset is now protected wholesale. Registered entries were already treated as roots; what was missing was the configuration that defines them.
+</li></ul>
+<h2 id="0-13-0-2026-08-19">[0.13.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>A "Not mine" button on every Compile Time finding and cost row.</strong> Ownership inference needs a day of normal work before it can tell your assemblies from vendored plugins, and it can be wrong regardless — a plugin someone patched by hand once looks edited forever. Marking an assembly removes it from findings and from Cost to touch immediately, and a "Marked as not yours" list at the bottom undoes it. A manual mark always beats the inference: it is evidence, not authority.
+</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>A conditionally-used reference offered a Remove button while its own text said removal was not offered.</strong> The classification was right — a reference used only behind an inactive <code>#if</code> correctly sets no fix target — but the button was drawn from the finding's type alone and ignored that, contradicting the sentence directly above it.
+</li></ul>
+<h2 id="0-12-0-2026-08-19">[0.12.0] - 2026-08-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Compile Time now tells your own assemblies from third-party plugins, and stops advising you about theirs.</strong> On a real project the findings list was almost entirely SRDebugger, ZString, TextMeshPro and friends — true statements about code the developer did not write and cannot keep changed, since the next package update overwrites it.
+</li></ul>
+<p>There is no reliable way to tell these apart by looking at the files. A <code>package.json</code> exists only for UPM packages, so anything imported as a <code>.unitypackage</code> has no marker at all — SRDebugger sits in <code>Assets/StompyRobot</code> with nothing to go on. Folder conventions like <code>Plugins</code> or <code>ThirdParty</code> catch some layouts and miss every project that uses the vendor's own name.</p>
+<p>So the question is answered by what actually happens instead: which assemblies recompile because someone changed them. Third-party code is never edited and never appears; your own code appears within a day of normal work, with nothing to configure. Two things keep the inference sound — a round that rebuilt most of the project (opening it, or a cleared <code>Library</code>) says nothing about authorship and is ignored, and within a round, editing one assembly also rebuilds everything depending on it, so only assemblies depending on nothing else in the same round count as edited.</p>
+<p>Until there is evidence, nothing is filtered and the tab says so plainly: an empty result means "not known yet", never "none of these are yours".</p>
+<h2 id="0-11-3-2026-08-19">[0.11.3] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>The SRDebugger removal button was still there in 0.11.2.</strong> The guard added in that release derived what to search for from the referenced assembly's namespaces, read off the loaded assembly — and .NET loads assemblies lazily, so on a project where nothing had touched <code>Unity.InputSystem</code> yet there was nothing to read and only the assembly name remained to search for. Unity ships that assembly as <code>Unity.InputSystem</code> holding namespace <code>UnityEngine.InputSystem</code>, and neither string contains the other, so the guard missed exactly the case it was written for. It now also checks something that needs nothing loaded: if any of the assembly's own sources contain <code>#if</code>, its compiled output cannot be a complete record of what the code uses, and removal is not offered at all. The finding still appears, saying why.
+</li>
+<li><strong>Cost to touch ranked by the wrong thing before anything is timed.</strong> With no measurement yet every entry tied at zero and the tiebreak was assembly count, which put widely-referenced packages on top while <code>Assembly-CSharp</code> — 1195 of the user's own scripts, depended on by nothing — sat at the bottom. Untimed entries now rank by how many scripts rebuild, and each row states that count.
+</li></ul>
+<h2 id="0-11-2-2026-08-19">[0.11.2] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>A "remove this unused reference" button that would have broken a package.</strong> On a real project the tab offered to strip <code>Unity.InputSystem</code> from SRDebugger's asmdef. Checked the source: SRDebugger uses it only inside <code>#if ENABLE_INPUT_SYSTEM</code>, so with that symbol undefined the compiled output has no such reference and the comparison called it unused — the exact conditional-compilation case the finding's own text warned about, with a one-click fix sitting next to it anyway. A reference is now suppressed when the assembly's own sources mention it at all, which is what conditional use looks like from outside. Matching had to be on the namespaces the referenced assembly declares, not on its name: Unity ships the Input System as assembly <code>Unity.InputSystem</code> containing namespace <code>UnityEngine.InputSystem</code>, so the first attempt searched for a string that never appears in code using it, and reported the reference anyway.
+</li>
+<li><strong><code>Assembly-CSharp</code> was missing from Cost to touch</strong> — the assembly holding 1195 of the user's scripts on the test project, and by far the most expensive thing to edit there. It has no asmdef, so the editability filter excluded it, leaving the ranking topped by third-party packages nobody can restructure.
+</li>
+<li><strong>Monolith split candidates favoured the smallest folders.</strong> Ranking by isolation alone surfaced three-file folders: trivially extractable and worth nothing, since removing three files from an assembly of a thousand changes nothing about what rebuilds. Candidates are now ranked by how many scripts move per outward reference that must be untangled.
+</li></ul>
+<h2 id="0-11-1-2026-08-19">[0.11.1] - 2026-08-19</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Compile Time froze the editor on a real project.</strong> The split-opportunity analysis was called straight from the draw loop, so every repaint reflected over every type of every dependent assembly. Measured on the 68-assembly dev project with only two editable assemblies: 37 ms per repaint, or 1.11 seconds of work for every second of UI — the editor could never catch up, and a 155-assembly project made it far worse. It now runs once when Analyze is pressed and the result is reused while drawing. Nothing about it changed between repaints in the first place.
+</li>
+<li><strong>Findings were mostly other people's packages.</strong> Auto Referenced is Unity's default, so nearly every package a project pulls in has it set — on a real project the list filled with TextMeshPro, ZString, SRDebugger and friends, burying anything actionable. It is now reported once as a count rather than once per assembly, and only where it can cost something, since Assembly-CSharp has to hold code for anything auto-referenced into it to matter. Runtime assemblies referencing editor assemblies aggregate the same way past a handful, with the finding saying plainly that most are third-party packages the user did not write.
+</li></ul>
+<h2 id="0-11-0-2026-08-18">[0.11.0] - 2026-08-18</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Compile Time</strong>, a fourth tab, answering "why is my <em>day</em> slow" rather than "why is my game slow". Checkup inspects a scene, Build X-Ray a build, Performance Hunter a running game — none of them was about the wait between saving a script and being able to play again, which for a team past the prototype stage is the bigger number.
+<ul>
+<li><strong>Cost to touch</strong> — each assembly priced by what rebuilds when you edit it: itself plus everything depending on it, timed from your own compilations.
+</li>
+<li><strong>Unused references</strong> with one-click removal, taken from the compiler's own output: it emits an assembly reference only where a type from it is used, so what an asmdef declares minus what its compiled output references is exactly the unused set.
+</li>
+<li><strong>Reference rings</strong> reported in full. Unity refuses to compile when assemblies form a ring but names only one participant; this names all of them, in order.
+</li>
+<li><strong>Editor code in a runtime assembly</strong>, which compiles fine in the editor and fails when someone makes a build.
+</li>
+<li><strong>Auto-referenced assemblies</strong>, which widen what rebuilds without appearing in any reference list a person can read.
+</li>
+<li><strong>Monolith and over-split triage</strong> — too much in one assembly, or so little in each that fixed per-compilation overhead is most of the cost.
+</li></ul>
+</li></ul>
+<p>Three things were measured rather than assumed while building this, and each changed the design:</p>
+<ul>
+<li><strong>Unity's per-assembly compile callbacks do not time compilation.</strong> <code>assemblyCompilationStarted</code> and <code>assemblyCompilationFinished</code> both fired within the same millisecond for an assembly whose compilation round took 819 ms, and the "not required" notices for everything else arrived 800 ms after the round began — the callbacks are delivered after the work. Timing between them measured 0.4 ms for a compile that really took 547 ms. Cost is now measured per round, and an assembly is only given a cost from rounds where it compiled alone, since splitting a shared round between assemblies would be a model presented as a measurement.
+</li>
+<li><strong><code>Assembly.assemblyReferences</code> is not what the asmdef declares.</strong> It reports everything an assembly can see, auto-referenced assemblies included: an asmdef with <code>"references": []</code> came back claiming four references. Declared references are now read from the asmdef file itself, so the tool never suggests deleting a line the user did not write.
+</li>
+<li><strong>A path under <code>Packages/</code> does not mean the user can edit it.</strong> Registry packages report such a path while living read-only in <code>Library/PackageCache</code>. Before this was fixed the tool offered fixes for 66 assemblies in a project containing exactly two hand-written asmdefs.
+</li></ul>
+<p>Removing a reference rewrites only the matched line, leaving every other asmdef field byte for byte as written — verified by round-tripping a real asmdef and diffing it against the original.</p>
+<h2 id="0-10-0-2026-08-18">[0.10.0] - 2026-08-18</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Build X-Ray's Mesh Import sub-view is now Asset Import</strong>, and covers textures and animation clips as well as meshes. One scan runs every check; each reports its own list, so a safe batch fix is never mixed in with one that needs judgement.
+</li></ul>
+<h3 id="added">Added</h3>
+<p>Four more import audits, from the e-book's texture, mesh and animation chapters:</p>
+<ul>
+<li><strong>Meshes keeping a second copy in memory</strong> — Read/Write Enabled doubles what a mesh costs and exists only so scripts can read geometry. This is the one import setting whose fix can throw at runtime rather than just look worse, so Fix All is offered only when nothing in the project reads mesh data; otherwise the list still appears, one mesh at a time, with the reason the batch is unavailable.
+</li>
+<li><strong>Textures spending memory on nothing</strong> — mipmaps generated for Sprite and GUI textures, which are drawn at a fixed size, and Read/Write keeping a second CPU copy. Both appear on one row per texture. Textures on 3D surfaces are left alone: varying distance is what mipmaps are for.
+</li>
+<li><strong>Humanoid rigs that are not being retargeted</strong> — a Humanoid rig runs IK and retargeting every frame whether anything uses them or not, which Unity puts at 30-50% more CPU than Generic. Only models whose avatar comes from themselves are listed; a model retargeting onto another rig genuinely needs Humanoid. Reported, never switched automatically — the rig type affects every animation on that model.
+</li>
+<li><strong>Animation clips that animate scale</strong> — scale curves cost more to evaluate than position and rotation. Constant curves are excluded, matching Unity's own guidance, because it already optimizes those. Reported rather than fixed: removing a scale curve changes the animation.
+</li></ul>
+<p>Non-power-of-two textures were considered and deliberately left out. The e-book pairs that requirement with PVRTC and ETC, while ASTC — which the same chapter recommends for modern mobile — has no such requirement, so flagging every NPOT texture would be noise on most projects.</p>
+<h2 id="0-9-0-2026-08-18">[0.9.0] - 2026-08-18</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>The GC Hunter tab is now Performance Hunter.</strong> It was named for the one thing it measured; it now also reports what the renderer is being asked to draw, and the old name would have been wrong. Behaviour of everything already there is unchanged.
+</li></ul>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Rendering statistics in Performance Hunter</strong> — SetPass calls, batches, and triangles per frame, measured live during a hunt. Deliberately counts rather than milliseconds: editor timings are dominated by the editor's own loop and by unoptimized code, but a batch is a batch and a SetPass call is a SetPass call whether the scene is drawn here or on a device, because those follow from scene content and batching rules rather than host speed. Three numbers only — draw calls and vertices follow from these and would just crowd the panel.
+</li>
+<li><strong>Two more allocation sources from Unity's e-book that were missing.</strong> Its GC chapter lists five, of which the scanner covered three (strings, coroutines, LINQ) and deliberately skipped a fourth (boxing, which text alone cannot distinguish from ordinary generic code):
+<ul>
+<li><code>.tag ==</code> string comparison, which allocates a fresh string on every read where <code>CompareTag</code> allocates none. Assignment and <code>CompareTag</code> itself are not flagged.
+</li>
+<li>Regular expressions in a hot path, which the e-book names in the same breath as LINQ. Constructing one is reported as worse than a static call, and reusing a cached <code>Regex</code> instance is not flagged at all.
+</li></ul>
+</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>When a hunt measures a garbage-collection pause serious enough to feel and Incremental GC is off, the diagnosis now names that setting as the thing to try. It already read the setting and worded the measurement accordingly, but stopped short of pointing at the fix. Kept conditional on an actual measurement rather than made a standing project-settings check, because Unity's guidance is itself conditional — incremental collection trades one long freeze for repeated short ones, which is only a win once there is a freeze worth splitting.
+</li></ul>
+<h2 id="0-8-0-2026-08-17">[0.8.0] - 2026-08-17</h2>
+<h3 id="added">Added</h3>
+<p>Seven new checks, sourced from Unity's own "Optimize your game performance" e-book, added to the two static checkers that could reach them without runtime data:</p>
+<p><strong>Scan Code:</strong></p>
+<ul>
+<li>Empty <code>Update</code>/<code>LateUpdate</code>/<code>FixedUpdate</code> — Unity still calls it every frame with nothing to show for it.
+</li>
+<li>String-keyed Animator/Material/Shader lookups (<code>SetFloat("Speed", ...)</code> etc.) — only fires on a string literal argument, so an already-cached hash never gets flagged.
+</li>
+<li><code>AddComponent</code> in a hot path.
+</li>
+<li><code>Instantiate</code>/<code>Destroy</code> in a hot path — shares its finding text with GC Hunter's live pattern matcher, so the same problem reads the same way whether caught statically or while playing.
+</li></ul>
+<p><strong>Checkup:</strong></p>
+<ul>
+<li>Accelerometer Frequency left on for a mobile target when no script in the project reads <code>Input.acceleration</code> or <code>Input.gyro</code> — verified by scanning project scripts, not guessed from the setting alone.
+</li>
+<li>Physics simulation (Simulation Mode, Auto Sync Transforms) still running automatically in a scene with no Rigidbody and no Collider at all.
+</li>
+<li>An unusually deep parent chain or an unusually large number of direct children on one Transform — stated as a shape heuristic, not a hard rule, since no single number is documented as "too deep."
+</li></ul>
+<p>Skipped on purpose: Auto Graphics API / Target Architectures (which platforms are "supported" is a judgment call this tool can't make safely) and anything that needs shader analysis (normals/tangents, from the earlier mesh import work) or runtime data this project's own philosophy already excludes from a static checker.</p>
+<p>Verified live against real project state for every new rule, including forcing each positive case (an empty scene for the physics rule, a forced mobile profile for the accelerometer rule, a temporary 15-level-deep hierarchy for the shape rule) and restoring project settings and the open scene afterward.</p>
+<h2 id="0-7-0-2026-08-17">[0.7.0] - 2026-08-17</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Build X-Ray → Mesh Import</strong>, a new sub-view that finds meshes importing rig and/or blend shape data that isn't actually there. Checked against the imported data itself — bone weights, blend shape count — never guessed from the importer's own settings, since those settings are exactly what might be wrong. A mesh only gets flagged for the piece it genuinely doesn't use: a mesh with a blend-shape-driven animation but no skeleton keeps blend shapes and loses only the rig; a mesh with real bone weights and real blend shapes is left alone entirely. Each row can be fixed individually, skipped (with a visible Skipped list to bring one back), or fixed all at once.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Introduced a shared list widget (<code>MeshCheckListGUI</code>) for asset-import checks — list, ping in Project, per-row Fix, Fix All, Skip, and a Skipped section — so future checks in this family don't reimplement the same list mechanics.
+</li></ul>
+<h2 id="0-6-0-2026-08-17">[0.6.0] - 2026-08-17</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Scan code no longer reports findings from code that can't ship.</strong> Found on a real project: an entire <code>Update()</code> sat behind <code>#if UNITY_EDITOR</code>, running only while testing in the editor, yet a hot-path rule reported an allocation inside it with the same "runs in your game" framing as ordinary player code. <code>ScriptSource</code> now recognizes <code>UNITY_EDITOR</code>, <code>DEVELOPMENT_BUILD</code>, and <code>ENABLE_DEBUG</code> as symbols that are never defined in a release player build, and evaluates <code>#if</code>/<code>#elif</code>/<code>#else</code> conditions built from them (including combinations like <code>(ENABLE_DEBUG || UNITY_EDITOR) &amp;&amp; !DISABLE_SRDEBUGGER</code>) to find every line that is provably never compiled into a release build. This is the same principle already applied to whole files under <code>/Editor/</code> and <code>/Plugins/</code> in <code>CodeScanner.ShouldScan</code>, just at line granularity for files that mix real player code with editor-only branches. An unrecognized symbol — a platform define, a project-specific one this evaluator was never told about — never gets guessed at; only a condition this evaluator can prove is always false is excluded, everything else is scanned exactly as before.
+</li></ul>
+<h2 id="0-5-0-2026-08-17">[0.5.0] - 2026-08-17</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Scan code findings now carry a Confidence separate from Severity: Confirmed or Guarded.</strong> Found on a real project: <code>GetTimerString()</code> checked a precomputed 500-entry cache and returned on a hit before falling through to <code>string.Format</code> on a miss, yet the string-allocation rule reported that fallback with the same "runs every frame" framing as an allocation with nothing guarding it — the cache made it the rare path, not the common one. <code>ScriptSource</code> now detects, per line, whether an earlier guard clause in the same method — an <code>if</code> whose body returns, throws, or breaks/continues out of the same loop the guard opened in — lets control fall past it before reaching that line. Every hot-path rule gets this automatically through the shared <code>CreateFinding</code> call site. A Guarded finding still shows with its original Severity and is not hidden; it carries a "Guarded" badge and sorts after Confirmed findings of the same Severity, so it reads as "worth a second look before optimizing" rather than "definitely runs every frame."
+</li></ul>
+<h2 id="0-4-0-2026-08-17">[0.4.0] - 2026-08-17</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Duplicates is now its own Build X-Ray sub-view</strong>, next to Overview / Build Diff / Dead Assets. It was reachable before, but only as the last section at the bottom of Overview's scroll, behind a Find Duplicates button — easy to never notice it exists. The finder itself (exact-file and equivalent-material duplicates) is unchanged; only where it lives moved.
+</li></ul>
+<h2 id="0-3-2-2026-08-17">[0.3.2] - 2026-08-17</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Dead Asset Stripper no longer flags actively-used Sprite Atlas V2 atlases as unused.</strong> Found on a real project: 855 candidates included dozens of <code>.spriteatlasv2</code> files backing live Addressables-loaded rooms. Root cause, confirmed directly against a real atlas: the packing relationship only shows up in one direction of <code>AssetDatabase.GetDependencies</code> — an atlas depends on the sprites it packs, but nothing that uses one of those sprites (a prefab's <code>SpriteRenderer</code>, for instance) ever depends on the atlas back. A scanner that only walks forward from roots can never reach an atlas this way, no matter how used its packed content is — it looks exactly like an orphan, and this tool moves candidates out of the project, so treating "the graph never reached it" as "safe to quarantine" was wrong in the dangerous direction. The scanner now also walks the one edge the atlas API exposes directly — <code>SpriteAtlasExtensions.GetPackables</code>, the atlas's own record of what it packs — and protects an atlas whenever something already found to be used packs into it. An atlas whose packed content is genuinely unused still gets flagged.
+</li></ul>
+<h2 id="0-3-1-2026-08-17">[0.3.1] - 2026-08-17</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>The "Caught so far" significance floor added in 0.3.0 was a flat 64 B/frame cutoff derived from an internal constant with no basis beyond "a fraction of a number this file already used." Checked against Unity's own documentation and community practice: neither states or implies a bytes-per-frame acceptability number at all — the only guidance Unity gives is "ideally zero, as close as you can get." What the docs do describe is the actual mechanism: a collection is triggered by an allocation that cannot fit in remaining free heap space, so what matters is accumulation from repeated allocation, not the size of any single one. Significance is now judged by how often a call site recurs across scanned frames (at least 10% of them) rather than by its average size, which measures the thing the mechanism is actually sensitive to.
+</li></ul>
+<h2 id="0-3-0-2026-08-17">[0.3.0] - 2026-08-17</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Clear button</strong> in GC Hunter, next to Start/Stop Hunt. Forgets everything caught so far without ending the hunt — use it after a loading screen or menu so one-time setup allocations stop crowding out real gameplay offenders for the rest of the session. Recording, and the profiler configuration the hunt is using, are untouched.
+</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>"Caught so far" now shows offenders, not just whatever ranks highest.</strong> Found on a real project: a hint controller's search, gated behind a several-second UI idle timer, headlined the live panel at a fraction of a byte per frame while the project was, in truth, 99% clean. The measurement was correct — it really allocated that much, rarely — only presenting it as an offender was misleading. A call site is now named only when it is currently active or its lifetime average clears a real floor (64 B/frame, one sixteenth of the existing Warning threshold). Every site, named or not, still counts toward the total and the attributed percentage shown above the list.
+</li></ul>
+<h2 id="0-2-2-2026-08-17">[0.2.2] - 2026-08-17</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Project-settings findings (mobile frame pacing, shadow resolution, WebGL compression, and six others) offered a <strong>Show in Scene</strong> button that did nothing when pressed: their target is a persisted asset like QualitySettings, not a scene object, so the overlay had nothing to draw. The button is now shown only when a finding has at least one target that actually lives in the open scene; Select is unaffected and still works for asset targets.
+</li></ul>
+<h2 id="0-2-1-2026-08-17">[0.2.1] - 2026-08-17</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Scan code</strong> could attribute a finding to the wrong method entirely. Any statement shaped like <code>return Foo();</code>, <code>throw Foo();</code>, or <code>await Foo();</code> was parsed as if it were declaring a method named <code>Foo</code> right there, and the next brace pair found afterward — typically an unrelated <code>catch</code> block — got mislabelled as that phantom method's body. Found on a real project: a finding reported as being inside <code>IsInterstitialReady()</code> was actually inside <code>CanShowInterstitial()</code>, a different method 1200 lines away. Declarations are no longer accepted when their leading token is a C# keyword that can never be a return type.
+</li>
+<li>Fixing the above surfaced a second, older, unrelated gap caught by regression testing: a method written entirely on one line (<code>void Poll() { Bar(); }</code>) was invisible to every rule, because the code that measures a method's body treated "starts and ends on the same line" the same as "no body found at all."
+</li></ul>
+<h2 id="0-2-0-2026-08-17">[0.2.0] - 2026-08-17</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>The <strong>Scene Checkup</strong> tab is now <strong>Checkup</strong>, with a Scene / Code sub-view selector mirroring the one Build X-Ray already uses for Overview / Build Diff / Dead Assets. Scan code moved here from GC Hunter, where it was reachable but structurally out of place: it shares nothing mechanical with GC Hunter's live, Play-Mode-only measurement, while it shares everything with Scene Checkup — both are read-only checks that need no Play Mode. GC Hunter itself is unchanged; it goes back to being only what it says on the tab.
+</li></ul>
+<h2 id="0-1-1-2026-08-17">[0.1.1] - 2026-08-17</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>GC Hunter's <strong>Scan code</strong> no longer treats every coroutine as a hot path. A coroutine now counts as hot only when a <code>yield return</code> sits inside a loop opened within its own body — a one-shot <code>IEnumerator</code> that yields once during setup and finishes is not a per-frame cost, even though it contains the word <code>yield</code>. Found via a false-positive pass against a real third-party project: 33 of 48 coroutines there were one-shot, not repeating, and all were being flagged.
+</li></ul>
+<h2 id="0-1-0-2026-08-17">[0.1.0] - 2026-08-17</h2>
+<p>Initial version.</p>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>Scene Checkup</strong> — static analysis of the open scene with a Health Score, Scene View highlighting for flagged objects, and a one-click Fix All for the fixes marked safe to batch.
+</li>
+<li><strong>Build X-Ray</strong> — automatic build capture, a treemap and ranked asset table, per-build diffing, reversible importer fixes with backup/restore, and a quarantine-only dead asset stripper.
+</li>
+<li><strong>GC Hunter</strong> — Play Mode allocation hunting with a live meter, per-call-site attribution, worst-frame tracking, heavy-allocation detection, and a diagnosis of what the measured garbage-collector pauses actually cost, tied to the frequency and length of the stutters they cause.
+</li>
+<li><strong>Scan code</strong> — static allocation-pattern scanning of project scripts, with no Play Mode and no build required.
+</li>
+<li>Shareable PNG report card summarizing session outcomes.
+</li></ul>
+    </article>
+  </section>
+</div>
+
+<div class="statusbar">
+  <span class="keep">WhySlow — Performance &amp; Build Size Checkup · Buralex.Studio</span>
+  <span class="push"><a href="mailto:sburdenko@gmail.com">sburdenko@gmail.com</a></span>
+  <span>·</span>
+  <span>Unity is a trademark of Unity Technologies. Not affiliated.</span>
+</div>
+
+</body>
+</html>

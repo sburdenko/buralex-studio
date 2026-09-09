@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhySlow Documentation | Buralex.Studio</title>
+<meta name="description" content="How every WhySlow tab works, what it refuses to guess at, and what it cannot see.">
+<meta property="og:title" content="WhySlow Documentation">
+<meta property="og:description" content="How every WhySlow tab works, what it refuses to guess at, and what it cannot see.">
+<meta property="og:image" content="assets/img/buralex-banner-900x600.png">
+<link rel="canonical" href="https://sburdenko.github.io/buralex-studio/whyslow-docs.html">
+<link rel="icon" href="assets/img/buralex-logo-200x200.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/docs.css">
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-bolt" viewBox="0 0 16 16"><path d="M9 1 3 9h4l-1 6 6-8H8l1-6z"/></symbol>
+  <symbol id="i-script" viewBox="0 0 16 16"><path d="M3 1h7l3.5 3.5V15H3V1zm6.5 1v3H12L9.5 2zM5 7h6v1H5V7zm0 2.5h6v1H5v-1zm0 2.5h4v1H5v-1z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><path d="M10.6 9.2a5 5 0 1 0-1.4 1.4l3.4 3.4 1.4-1.4-3.4-3.4zM6.5 9.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 16 16"><path d="M8 1l6 2.2v4.5c0 3.6-2.5 6.4-6 7.3-3.5-.9-6-3.7-6-7.3V3.2L8 1z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 16 16"><path d="M1 3h14v10H1V3zm1.6 1L8 8.2 13.4 4H2.6z"/></symbol>
+</svg>
+
+<div class="menubar">
+  <a class="menubar__logo" href="index.html">
+    <img src="assets/img/buralex-logo-200x200.png" alt="Buralex Studio logo">
+    <b>Buralex<i>.Studio</i></b>
+  </a>
+  <a class="menubar__item" href="index.html#products">Products</a>
+  <a class="menubar__item" href="whyslow.html">WhySlow</a>
+  <a class="menubar__item" href="demo.html">Demo</a>
+  <a class="menubar__item" href="index.html#principles">Principles</a>
+  <a class="menubar__item" href="index.html#studio">Studio</a>
+  <a class="menubar__item" href="index.html#contact">Contact</a>
+  <div class="menubar__spacer"></div>
+  <div class="menubar__right">
+    <span class="menubar__dot"></span>
+    <span>Unity 2021.3 &rarr; Unity 6</span>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="toolbar__title"><b>WhySlow</b> — Documentation — com.buralex.whyslow</div>
+  <a class="tb-ghost" href="whyslow.html">← Product page</a>
+  <a class="tb-cta" href="mailto:sburdenko@gmail.com?subject=WhySlow%20question"><svg style="width:11px;height:11px;fill:currentColor"><use href="#i-mail"/></svg> Ask a question</a>
+</div>
+
+<div class="doc__wrap">
+  <section class="panel">
+    <div class="panel__tabs"><a class="tab" href="whyslow.html"><svg><use href="#i-bolt"/></svg> WhySlow</a><span class="tab is-active"><svg><use href="#i-script"/></svg> Documentation</span><a class="tab" href="whyslow-changelog.html"><svg><use href="#i-search"/></svg> Changelog</a><a class="tab" href="whyslow-license.html"><svg><use href="#i-shield"/></svg> License</a></div>
+    <article class="doc">
+<nav class="doc__toc"><a href="#the-five-tabs">The five tabs</a><a href="#quarantine-is-not-deletion">Quarantine is not deletion</a><a href="#what-is-never-reported-as-dead">What is never reported as dead</a><a href="#what-it-cannot-see">What it cannot see</a><a href="#ignoring-things">Ignoring things</a><a href="#preferences">Preferences</a><a href="#promises">Promises</a><a href="#requirements">Requirements</a><a href="#samples">Samples</a></nav><h1>WhySlow</h1>
+<p>Open the window, press one button, get a plain-language answer instead of a graph.</p>
+<p>WhySlow is written for someone who does not read the built-in Profiler. Every screen states a finding in a sentence, says why it matters, and offers a Fix where the fix is safe and reversible. Where a fix is not safe, it says so and leaves the decision to you.</p>
+<p><strong>Window → WhySlow.</strong></p>
+<hr>
+<h2 id="the-five-tabs">The five tabs</h2>
+<p>Each tab answers one question. If you know your question, you know your tab.</p>
+<h3 id="checkup-is-this-scene-set-up-sensibly">Checkup — "is this scene set up sensibly?"</h3>
+<p>Static analysis of the open scene and of your scripts. No Play Mode, no build.</p>
+<ul>
+<li><strong>Scene</strong> runs around thirty-five checks over lights, shadows, cameras, canvases, physics, animation and project settings, scores them, and highlights flagged objects in the Scene view. Fixes that are safe to apply in bulk are collected behind one button.
+</li>
+<li><strong>Code</strong> scans your scripts for allocation patterns in code that runs often — string building, LINQ, <code>GetComponent</code>, <code>Camera.main</code>, allocating physics queries, <code>Debug.Log</code>, and more — with no Play Mode required. It reads a project you have just opened.
+</li></ul>
+<p>Two things keep that scan honest. A finding behind an early return or a cache is marked <strong>Guarded</strong> rather than presented as certain, and code inside <code>#if UNITY_EDITOR</code>, <code>DEVELOPMENT_BUILD</code> or <code>ENABLE_DEBUG</code> is not reported at all, because it never reaches a player build.</p>
+<h3 id="project-assets-what-has-piled-up-in-here">Project Assets — "what has piled up in here?"</h3>
+<p>Three audits of what is on disk. None of them needs a build.</p>
+<ul>
+<li><strong>Dead Assets</strong> finds assets nothing can reach, grouped by folder. See below.
+</li>
+<li><strong>Duplicates</strong> finds byte-identical files and materials that differ in nothing that matters.
+</li>
+<li><strong>Import Settings</strong> finds assets spending memory on data nothing uses. On meshes: rig and blend shape data on models that have neither, Read/Write keeping a second copy in CPU memory, and Humanoid rigs that are not being retargeted. On textures: mipmaps on sprites drawn at a fixed size, Read/Write, and textures that will be built uncompressed. On audio: a Load Type that contradicts the clip's size, sample rates above what a phone can use, multichannel clips that will be flattened anyway if played positionally, and clips authored from an already-lossy file. Plus animation clips animating scale.
+</li></ul>
+<p>Two of those never batch. Forcing a clip to mono is audible, and whether it is played positionally cannot be seen from a scan; a lossy source has no fix at all, because the remedy is re-exporting the file. The texture fix turns compression on and leaves the format Automatic, so Unity picks per platform -- which compressed format is right depends on the oldest device you support, and that is your decision, not the tool's.</p>
+<h3 id="build-x-ray-why-is-my-build-this-big">Build X-Ray — "why is my build this big?"</h3>
+<p>Needs a captured build; WhySlow records one automatically every time you build.</p>
+<p><strong>Overview</strong> shows a treemap and a ranked table of what took the space, with reversible importer fixes and an estimate of what each saves. <strong>Build Diff</strong> compares two builds per asset and names the biggest contributor to any growth.</p>
+<h3 id="performance-hunter-why-does-it-stutter-while-playing">Performance Hunter — "why does it stutter while playing?"</h3>
+<p>Play Mode measurement. Start a hunt, play the part that feels bad, and watch allocations accumulate by call site, with the worst frames kept alongside what caused them. It also diagnoses what the garbage collector actually cost, from its own profiler samples rather than an assumed budget, and reports what the renderer is being asked to draw.</p>
+<p>A call site is named as an offender only when it is currently allocating or recurs in at least a tenth of scanned frames. A rare event with a large total is a measurement, not a problem, and is counted without being blamed.</p>
+<h3 id="compile-time-why-is-my-day-slow">Compile Time — "why is my day slow?"</h3>
+<p>Not about your game: about the wait between saving a script and being able to play again.</p>
+<p>It prices each assembly by what has to rebuild when you touch it, using durations measured from your own compilations. It reports reference rings in full, references your asmdefs declare that nothing uses, editor assemblies referenced from runtime ones, and both structural extremes — a monolithic <code>Assembly-CSharp</code> and a project split so far that fixed overhead dominates.</p>
+<p>Timings only appear for assemblies observed compiling <strong>alone</strong>, because a round shared by several assemblies cannot be divided between them without guessing.</p>
+<hr>
+<h2 id="quarantine-is-not-deletion">Quarantine is not deletion</h2>
+<p>Dead Assets never deletes anything. When you move assets to quarantine:</p>
+<ol>
+<li>A backup <code>.unitypackage</code> is exported first.
+</li>
+<li>Each file's contents and its <code>.meta</code> are hashed.
+</li>
+<li>Both files are moved out of <code>Assets</code> into a <code>WhySlow_StrippedAssets</code> folder <strong>beside</strong> your project, one folder per run.
+</li>
+<li>A <code>manifest.json</code> recording the original paths and hashes is written next to them.
+</li></ol>
+<p>Unity then behaves as though the files were gone, which is exactly how you find out whether anything needed them. <strong>Restore</strong> puts every file back at its original path and verifies its hash; if anything no longer matches, it says so rather than pretending the restore was clean.</p>
+<p>Commit to version control first anyway. Not because the operation is reckless, but because a known-good point costs you nothing and answers every later doubt.</p>
+<hr>
+<h2 id="what-is-never-reported-as-dead">What is never reported as dead</h2>
+<p>Trust in this list is worth more than completeness, so whole categories are excluded even though nothing references them:</p>
+<ul>
+<li><strong>Scripts, assemblies and asmdefs.</strong>
+</li>
+<li><strong>Documentation and licences</strong> — <code>.txt</code>, <code>.md</code>, <code>.pdf</code> and friends. They do not ship, they cost nothing, and having no references is what documentation is.
+</li>
+<li><strong>Native libraries and build inputs</strong> — <code>.aar</code>, <code>.jar</code>, <code>.so</code>, <code>.dylib</code>, <code>.pom</code>, <code>.gradle</code>, and anything inside a <code>.framework</code>, <code>.androidlib</code> or <code>.bundle</code>. Gradle and Xcode consume these; the asset graph never points at them.
+</li>
+<li><strong>Build configuration by name, anywhere</strong> — <code>link.xml</code>, <code>google-services.json</code>, <code>GoogleService-Info.plist</code>, <code>AndroidManifest.xml</code>, <code>NuGet.config</code> and similar. Unity and the platform toolchains find these by name. Removing <code>link.xml</code> breaks only release builds, which is the worst way to learn about a mistake.
+</li>
+<li><strong>Shader authoring sources</strong> — <code>.cginc</code>, <code>.hlsl</code>, <code>.glslinc</code> and Shader Graph sub-graphs. Shaders pull these in at import time, which leaves no reference for the asset graph to follow.
+</li>
+<li><strong>Everything under <code>Resources</code>, <code>StreamingAssets</code>, <code>Editor</code>, <code>Gizmos</code>, <code>Plugins</code> and <code>Editor Default Resources</code></strong>, every scene listed in Build Settings — ticked or not — and everything those scenes reference, every asset referenced from project settings, from a quality level's render pipeline asset, or registered in Build Settings by a package such as the Input System or Localization, everything carrying an AssetBundle name, every registered Addressables entry, and the Addressables configuration itself.
+</li></ul>
+<p>Scenes that are in Build Settings but unticked count as roots deliberately. Unticking a level while you work on another is normal; having the tool offer to quarantine it while you do is not.</p>
+<p>Before it lists anything, the scan states how many roots it protected and how many Addressables entries it found. If that number is zero in a project that plainly uses Addressables, treat the list with suspicion and tell me — it means detection failed, not that your content is dead.</p>
+<hr>
+<h2 id="what-it-cannot-see">What it cannot see</h2>
+<ul>
+<li><strong>Assets loaded by a name assembled at runtime.</strong> A path built from pieces, or an Addressables address held in data, is invisible to a reference graph.
+</li>
+<li><strong>Types resolved by reflection.</strong> An unused asmdef reference used only through <code>Type.GetType</code> looks unused, which is why removing a reference is offered as an easily reversed experiment rather than a certainty.
+</li>
+<li><strong>Coupling inside method bodies.</strong> The monolith split ranking reads type signatures only, so it is a place to start looking, not a list of safe extractions.
+</li>
+<li><strong>Whether a scene is slow on a device.</strong> Everything measured in Play Mode is measured in the editor, on your machine. Counts — draw calls, batches, allocations — carry over. Milliseconds do not.
+</li></ul>
+<p>Where a check knows it might be wrong, it says so on the finding instead of in a footnote.</p>
+<hr>
+<h2 id="ignoring-things">Ignoring things</h2>
+<p>Every list can be told to stay quiet: a folder or a single file in Dead Assets, an asset in Import Settings, an assembly in Compile Time. Dismissals persist between runs and are stored per project in <code>Library</code>, so they are yours and not your team's.</p>
+<p><strong>Options</strong> in the window header shows how much has been silenced in each tab, with one item to clear all of it. That count is there on purpose: a tool told to ignore enough things stops finding anything, and nothing else would show you why. The same menu offers <strong>Share report</strong>, which writes a one-page PNG summary of what you have measured and fixed.</p>
+<hr>
+<h2 id="preferences">Preferences</h2>
+<p><code>Edit ▸ Preferences ▸ WhySlow</code> holds two things.</p>
+<p><strong>Import Watcher</strong> notices assets as they are imported and warns about an uncompressed texture, a raw PCM clip or an unexpectedly heavy mesh at the moment it enters the project, rather than after a build. Each category can be switched off.</p>
+<p><strong>Import backups</strong> lists what the import fixes changed, most recent first, with a Restore for each. Every fix records the importer's complete settings before it writes anything, so Restore puts back exactly what was there.</p>
+<p>Both live in <code>Library/WhySlow</code>, which means they are per project, per machine, and not shared with your team. It also means a deleted <code>Library</code> takes the backup history with it — Restore is for undoing a fix you just made, not an archive.</p>
+<hr>
+<h2 id="promises">Promises</h2>
+<ul>
+<li><strong>Editor-only.</strong> The assembly is Editor-platform only. Zero bytes reach your player build.
+</li>
+<li><strong>Nothing changes without a click.</strong> No project setting, importer or asset is touched until you press a button that says so.
+</li>
+<li><strong>Every fix is reversible.</strong> Scene and project changes go through <code>Undo</code>; importer changes are backed up before they are written and can be restored per asset or per operation; quarantine is a move with a manifest and a verified restore.
+</li>
+<li><strong>No dependencies.</strong> UnityEngine, UnityEditor and Unity.Profiling. No NuGet, no DLLs, no third-party packages.
+</li></ul>
+<hr>
+<h2 id="requirements">Requirements</h2>
+<p>Unity 2021.3 LTS or newer. Verified on Unity 6 and 2022.3.</p>
+<h2 id="samples">Samples</h2>
+<p><strong>Demo Scene</strong> — a scene built to fail the checks, so you can see what the tool reports before pointing it at work that matters. Import it from the package's Samples tab.</p>
+    </article>
+  </section>
+</div>
+
+<div class="statusbar">
+  <span class="keep">WhySlow — Performance &amp; Build Size Checkup · Buralex.Studio</span>
+  <span class="push"><a href="mailto:sburdenko@gmail.com">sburdenko@gmail.com</a></span>
+  <span>·</span>
+  <span>Unity is a trademark of Unity Technologies. Not affiliated.</span>
+</div>
+
+</body>
+</html>
